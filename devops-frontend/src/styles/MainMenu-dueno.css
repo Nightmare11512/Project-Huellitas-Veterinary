@@ -1,0 +1,116 @@
+html body {
+  margin: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  overflow: hidden; /* para evitar scroll si las sidebars se salen */
+}
+
+.main-menu {
+  display: flex; /* contenedor horizontal */
+  height: 100vh; /* ocupa toda la altura */
+  gap: 10px; /* separación entre sidebars si quieres */
+  background: linear-gradient(135deg, #1e355f, #7a0f2d);
+  background-size: auto, 100% 100%;
+  animation: fondoAnimado 12s ease infinite;
+}
+
+@keyframes fondoAnimado {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+/* Sidebar principal */
+.sidebar {
+  position: fixed;
+  top: 20px;
+  left: -250px; /* fuera de pantalla al inicio */
+  width: 250px;
+  height: calc(100% - 40px);
+  background-color: lightgray;
+  color: black;
+  border-radius: 15px;
+  padding: 20px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  transition: left 0.5s ease, opacity 0.5s ease;
+  opacity: 0; /* invisible al inicio */
+  z-index: 100;
+}
+
+/* Sidebar secundaria */
+.sidebar.secondary {
+  width: 200px;
+  background-color: #8f8f8f;
+  border-radius: 15px;
+  padding: 15px;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+  position: fixed;
+  top: 20px;
+  left: -220px; /* fuera de pantalla */
+  transition: left 0.5s ease, opacity 0.5s ease;
+  opacity: 0;
+}
+
+/* Clase activa para mostrar sidebar principal */
+.sidebar.active {
+  left: 20px;
+  opacity: 1;
+}
+
+/* Clase activa para mostrar sidebar secundaria */
+.sidebar.secondary.active {
+  left: 315px; /* separada de la principal */
+  opacity: 1;
+}
+
+/* Items internos */
+.sidebar .menu-item,
+.sidebar.secondary .menu-item {
+  display: block;
+  margin-bottom: 15px;
+  padding: 10px;
+  border-radius: 10px;
+  color: black;
+  text-decoration: none;
+  transition: background-color 0.3s;
+}
+
+.sidebar .menu-item:hover,
+.sidebar.secondary .menu-item:hover {
+  background-color: #4b5563;
+}
+
+.sidebar.secondary p {
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+.sidebar.secondary.active p {
+  opacity: 1;
+}
+
+.button-back{
+  position: absolute;
+  padding: 10px 15px;
+  background-color: #2c2c54;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  z-index: 110; /* por encima de las sidebars */
+}
+
+.btn{
+  position: absolute;
+  padding: 10px 15px;
+  background-color: #2c2c54;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}

@@ -1,0 +1,77 @@
+import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import "../styles/MainMenu-dueno.css";
+
+function MainMenu() {
+  const navigate = useNavigate();
+  const [dueno, setDueno] = useState(null);
+  const [activeItem, setActiveItem] = useState(null); // controla item clickeado
+
+  const handleLogout = () => {
+    navigate("/");
+    sessionStorage.clear();
+  };
+
+  useEffect(() => {
+    const correo = sessionStorage.getItem("correo"); 
+    if (!correo) return;
+
+    const obtenerDatos = async () => {
+      try {
+        const host = window.location.hostname;
+        const correoCodificado = encodeURIComponent(correo);
+        const respuesta = await fetch(`http://dev-server.local:8080/duenomascota/correo/${correoCodificado}`);
+        if (!respuesta.ok) throw new Error(`HTTP error! status: ${respuesta.status}`);
+        const datos = await respuesta.json();
+        setDueno(datos);
+      } catch (error) {
+        console.error("Error al obtener los datos del dueño de mascota:", error);
+      }
+    };
+
+    obtenerDatos();
+  }, []);
+
+  const menuItems = ["Dirección", "Mascotas", "Citas", "Tratamientos"];  
+
+  return (
+    <div className="main-menu" style={{ display: "flex" }}>
+      {/* Sidebar principal */}
+      <div className={`sidebar ${dueno ? "active" : ""}`}>
+        <h2>Menú Principal</h2>
+        <h3>Bienvenido, {dueno ? dueno.nombre : "Dueño de Mascota"}</h3>
+        <nav className="nav-links">
+          {menuItems.map((item) => (
+            <div
+              key={item}
+              className={`menu-item ${activeItem === item ? "active" : ""}`}
+              onClick={() => setActiveItem(item)}
+              style={{ cursor: "pointer", margin: "5px 0" }}
+            >
+              {item}
+            </div>
+          ))}
+        </nav>
+        <button onClick={handleLogout} className="btn">Cerrar Sesión</button>
+      </div>
+
+      {/* Sidebar secundaria */}
+    <div className={`sidebar secondary ${activeItem ? "active" : ""}`}>
+      {activeItem ? (
+        <>
+      <h2>{activeItem}</h2>
+      <p>Contenido de {activeItem}</p>
+      <button className="button-back" onClick={() => setActiveItem(null)}>Volver</button>
+        </>
+      ) : null}
+    </div>
+
+  {/* Contenido principal, si quieres agregarlo */}
+  <div className="main-content" style={{ flex: 1, padding: "20px" }}>
+    {/* Aquí tu contenido principal */}
+  </div>
+</div>
+  );
+}
+
+export default MainMenu;
