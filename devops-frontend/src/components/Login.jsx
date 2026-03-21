@@ -50,7 +50,7 @@ function Login() {
     const esCorreo = user.includes("@");
     const esNumeroValido = /^[1-9][0-9]*$/.test(user);
 
-    if (!esCorreo && !esNumeroValido) {
+    if (!esCorreo || user.value == '') {
       alert("Ingresa un ID válido o un correo válido");
       return;
     }
