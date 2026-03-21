@@ -1,5 +1,5 @@
 package com.example.Proyect_DevOps.models;
-import javax.persistence.*;
+import jakarta.persistence.*;
 
 @Entity
 @Table(name = "ciudades")
