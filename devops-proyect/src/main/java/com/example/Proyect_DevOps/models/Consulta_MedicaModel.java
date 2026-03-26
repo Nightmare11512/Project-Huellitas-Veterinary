@@ -15,6 +15,11 @@ public class Consulta_MedicaModel {
     @OneToOne
     private CitaModel cita;
 
+    @ManyToMany
+    @JoinTable(name = "Consulta-Tratamiento", joinColumns = @JoinColumn(name = "idCita"),
+    inverseJoinColumns = @JoinColumn(name = "idTratamiento"))
+    private List<TratamientoModel> tratamientos = new ArrayList<>();
+
     private String motivo;
     private String diagnostico;
     private String recomendaciones;
@@ -29,5 +34,43 @@ public class Consulta_MedicaModel {
     }
 
     public Consulta_MedicaModel(){    
+    }
+
+    public int getId(){
+        return idConsulta;
+    }
+ 
+    public void setId(int idConsulta){
+        this.idConsulta = idConsulta;
+    }
+
+    public String getMotivo(){
+        return motivo;
+    }
+
+    public void setMotivo(String motivo){
+        this.motivo = motivo;
+    }
+
+    public String getDiagnostivo(){
+        return diagnostico;
+    }
+
+    public void setDiagnostico(String diagnostico){
+        this.diagnostico = diagnostico;
+    }
+
+    public String getRecomendaciones(){
+        return recomendaciones;
+    }
+
+    public void setRecomendaciones(String recomendaciones){
+        this.recomendaciones = recomendaciones;
+    }
+
+    @Override
+    public String toString(){
+        return "idConsulta=" + idConsulta + ", Motivo=" + motivo + 
+        ", Diagnostico=" + diagnostico + ", Recomendaciones=" + recomendaciones;
     }
 }
