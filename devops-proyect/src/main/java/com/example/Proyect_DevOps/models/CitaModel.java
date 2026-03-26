@@ -20,7 +20,7 @@ public class CitaModel {
     @JoinColumn(name = "IdMascota")
     private MascotaModel mascotaModel;
 
-    @ManyToMany
+    @ManyToOne
     @JoinColumn(name = "IdUsuario")
     private UsuarioModel usuarioModel;
 
