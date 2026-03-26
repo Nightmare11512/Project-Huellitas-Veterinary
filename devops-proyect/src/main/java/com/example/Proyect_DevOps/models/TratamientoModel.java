@@ -4,6 +4,6 @@ import jakarta.persistence.*;
 
 @Entity
 @Table(name = "tratamientos")
-public class Tratamiento {
+public class TratamientoModel {
 
 }

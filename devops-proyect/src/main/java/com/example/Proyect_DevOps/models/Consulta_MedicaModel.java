@@ -68,6 +68,14 @@ public class Consulta_MedicaModel {
         this.recomendaciones = recomendaciones;
     }
 
+    public List<TratamientoModel> getListaTratamientos(){
+        return tratamientos;
+    }
+
+    public void setListaTratamientos(List<TratamientoModel> tratamientos){
+        this.tratamientos = tratamientos;
+    }
+
     @Override
     public String toString(){
         return "idConsulta=" + idConsulta + ", Motivo=" + motivo + 
