@@ -1,6 +1,8 @@
 package com.example.Proyect_DevOps.models;
 
 import jakarta.persistence.*;
+import java.util.List;
+import java.util.ArrayList;
 
 @Entity
 @Table(name = "servicios")
@@ -12,6 +14,9 @@ public class ServicioModel {
 
     private String nombre;
     private double costo;
+
+    @ManyToMany(mappedBy = "servicios")
+    private List<CitaModel> citas = new ArrayList<>();
 
     public ServicioModel(int idServicio, String nombre, double costo) {
         this.idServicio = idServicio;
@@ -44,6 +49,14 @@ public class ServicioModel {
 
     public void setCosto(double costo) {
         this.costo = costo;
+    }
+
+    public List<CitaModel> getListaCitas(){
+        return citas;
+    }
+
+    public void setListasCitas(List<CitaModel> citas){
+        this.citas = citas;
     }
 
     @Override

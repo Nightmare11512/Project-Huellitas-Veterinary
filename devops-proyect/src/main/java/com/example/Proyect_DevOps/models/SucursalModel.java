@@ -18,8 +18,7 @@ public class SucursalModel {
     @JoinColumn(name = "idGestor")
     private GestorModel gestor;
 
-    public SucursalModel(int idSucursal, DireccionModel direccion, GestorModel gestor) {
-        this.idSucursal = idSucursal;
+    public SucursalModel(DireccionModel direccion, GestorModel gestor) {
         this.direccion = direccion;
         this.gestor = gestor;
     }

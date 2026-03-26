@@ -15,7 +15,7 @@ public class RazaModel {
     @JoinColumn(name = "idEspecie")
     private EspecieModel especie;
 
-    public RazaModel(int idRaza, String nombre, EspecieModel especie) {
+    public RazaModel(String nombre, EspecieModel especie) {
         this.idRaza = idRaza;
         this.nombre = nombre;
         this.especie = especie;

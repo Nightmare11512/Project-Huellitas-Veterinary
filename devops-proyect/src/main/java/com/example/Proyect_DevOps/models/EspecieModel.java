@@ -10,8 +10,7 @@ public class EspecieModel {
     private int idEspecie;
     private String nombre;
 
-    public EspecieModel(int idEspecie, String nombre) {
-        this.idEspecie = idEspecie;
+    public EspecieModel(String nombre) {
         this.nombre = nombre;
     }
 

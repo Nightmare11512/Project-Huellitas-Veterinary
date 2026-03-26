@@ -10,8 +10,7 @@ public class RolModel {
     private int idRol;
     private String nombre;
 
-    public RolModel(int idRol, String nombre) {
-        this.idRol = idRol;
+    public RolModel(String nombre) {
         this.nombre = nombre;
     }
 

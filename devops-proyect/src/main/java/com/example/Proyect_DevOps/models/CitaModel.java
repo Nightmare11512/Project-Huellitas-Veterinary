@@ -1,7 +1,8 @@
 package com.example.Proyect_DevOps.models;
 
 import java.time.LocalDate;
-
+import java.util.List;
+import java.util.ArrayList;
 import jakarta.persistence.*;
 
 @Entity
@@ -27,8 +28,12 @@ public class CitaModel {
     private LocalDate fecha;
     private int estado_cita;
 
-    public CitaModel(int idCita, SucursalModel sucursalModel, MascotaModel mascotaModel, UsuarioModel usuarioModel, LocalDate fecha, int estado_cita){
-        this.idCita = idCita;
+    @ManyToMany
+    @JoinTable(name= "Cita-Servicio", joinColumns = @JoinColumn(name = "IdCita"),
+    inverseJoinColumns = @JoinColumn(name = "IdSucursal"))
+    public List<ServicioModel> servicios = new ArrayList<>();
+
+    public CitaModel(SucursalModel sucursalModel, MascotaModel mascotaModel, UsuarioModel usuarioModel, LocalDate fecha, int estado_cita){
         this.sucursalModel = sucursalModel;
         this.mascotaModel = mascotaModel;
         this.usuarioModel = usuarioModel;
@@ -85,6 +90,14 @@ public class CitaModel {
 
     public void setEstadoCita(int estado_cita){
         this.estado_cita = estado_cita;
+    }
+
+    public List<ServicioModel> getListaServicios(){
+        return servicios;
+    }
+
+    public void setListaServicios(List<ServicioModel> servicios){
+        this.servicios = servicios;
     }
 
     @Override
