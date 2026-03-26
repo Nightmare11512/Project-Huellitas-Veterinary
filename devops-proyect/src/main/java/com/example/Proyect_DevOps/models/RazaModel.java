@@ -16,7 +16,6 @@ public class RazaModel {
     private EspecieModel especie;
 
     public RazaModel(String nombre, EspecieModel especie) {
-        this.idRaza = idRaza;
         this.nombre = nombre;
         this.especie = especie;
     }
