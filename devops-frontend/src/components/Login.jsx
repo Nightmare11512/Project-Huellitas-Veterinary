@@ -13,8 +13,8 @@ function Login() {
   useEffect(() => {
     const mes = new Date().getMonth();
     const audioSrc = {
-      2: "/Music/TANK QUINCEAÑERA (PARODIA).mp3",
-      1: "/Music/La mejor música de elevador o ascensor.mp3",
+      1: "/Music/TANK QUINCEAÑERA (PARODIA).mp3",
+      2: "/Music/La mejor música de elevador o ascensor.mp3",
       7: "/Music/Marcha militar alemana _Erika_ - Subtitulado en Español(MP3_160K).mp3",
       11: "/Music/Sleigh Ride (Indian Christmas Remix) - Vindaloo Singh.mp3"
     };
@@ -55,35 +55,7 @@ function Login() {
       return;
     }
 
-    const url = esCorreo
-      ? `http://dev-server.local:8080/duenomascota/login`
-      : `http://dev-server.local:8080/gestor/login`;
-
-    const datos = esCorreo
-      ? { correo: user, password: contraseña }
-      : { id: user, password: contraseña };
-
-    try {
-      const respuesta = await fetch(url, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(datos)
-      });
-
-      if (respuesta.ok) {
-        if (esCorreo) {
-          navigate("/MainMenu/");
-          sessionStorage.setItem("correo", user);
-        } else {
-          navigate("/MainMenu");
-          sessionStorage.setItem("id", user);
-        }
-      } else {
-        console.error("Error en el login", respuesta.status);
-      }
-    } catch (error) {
-      console.error("Error de conexión:", error);
-    }
+    
   };
 
   return (

@@ -6,15 +6,14 @@ import jakarta.persistence.*;
 @Table(name = "colonias")
 public class ColoniaModel {
     @Id
-    @Column(name = "idColonia")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int idColonia;
     private String nombre;
     @ManyToOne
     @JoinColumn(name = "idCiudad")
     private CiudadModel ciudad;
 
-    public ColoniaModel(int idColonia, String nombre, CiudadModel ciudad) {
-        this.idColonia = idColonia;
+    public ColoniaModel(String nombre, CiudadModel ciudad) {
         this.nombre = nombre;
         this.ciudad = ciudad;
     }

@@ -7,7 +7,7 @@ import jakarta.persistence.*;
 public class EstadoModel {
     
         @Id
-        @Column(name = "idEstado")
+        @GeneratedValue(strategy = GenerationType.IDENTITY)
         private int idEstado;
         private String nombre;
 
@@ -15,8 +15,7 @@ public class EstadoModel {
         @JoinColumn(name = "idPais")
         private PaisModel pais;
 
-        public EstadoModel(int idEstado, String nombre, PaisModel pais) {
-            this.idEstado = idEstado;
+        public EstadoModel(String nombre, PaisModel pais) {
             this.nombre = nombre;
             this.pais = pais;
         }

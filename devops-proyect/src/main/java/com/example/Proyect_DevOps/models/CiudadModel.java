@@ -6,15 +6,15 @@ import jakarta.persistence.*;
 public class CiudadModel {
 
     @Id
-    @Column(name = "idCiudad")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int idCiudad;
     private String nombre;
+    
     @ManyToOne
     @JoinColumn(name = "idEstado")
     private EstadoModel idEstado;
 
-    public CiudadModel(int idCiudad, String nombre, EstadoModel idEstado) {
-        this.idCiudad = idCiudad;
+    public CiudadModel(String nombre, EstadoModel idEstado) {
         this.nombre = nombre;
         this.idEstado = idEstado;
     }

@@ -1,38 +1,40 @@
 package com.example.Proyect_DevOps.models;
+
 import jakarta.persistence.*;
 
-public class PaisModel {
-
+@Entity
+@Table(name = "roles")
+public class RolModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int idPais;
+    private int idRol;
     private String nombre;
 
-    public PaisModel() {
-    }
-
-    public PaisModel(String nombre) {
+    public RolModel(String nombre) {
         this.nombre = nombre;
     }
 
-    public int getIdPais() {
-        return idPais;
+    public RolModel() {
     }
-
-    public void setIdPais(int idPais) {
-        this.idPais = idPais;
+    
+    public int getIdRol() {
+        return idRol;
     }
-
+    
+    public void setIdRol(int idRol) {
+        this.idRol = idRol;
+    }
+    
     public String getNombre() {
         return nombre;
     }
-
+    
     public void setNombre(String nombre) {
         this.nombre = nombre;
     }
-
+    
     @Override
     public String toString() {
-        return "[idPais=" + idPais + ", nombre=" + nombre + "]";
+        return "idRol=" + idRol + ", nombre=" + nombre;
     }
 }
