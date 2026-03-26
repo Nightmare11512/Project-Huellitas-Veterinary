@@ -12,7 +12,10 @@ public class UsuarioModel {
     private String nombre;
     private String paterno;
     private String materno;
+
+    @Column(nullable = false)
     private String correo;
+    @Column(nullable = false)
     private String contraseña;
 
     @ManyToOne
