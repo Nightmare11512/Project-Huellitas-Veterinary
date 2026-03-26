@@ -9,6 +9,7 @@ public class CiudadModel {
     @Column(name = "idCiudad")
     private int idCiudad;
     private String nombre;
+    
     @ManyToOne
     @JoinColumn(name = "idEstado")
     private EstadoModel idEstado;
