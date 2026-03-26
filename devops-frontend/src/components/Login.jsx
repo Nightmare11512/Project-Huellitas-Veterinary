@@ -55,35 +55,7 @@ function Login() {
       return;
     }
 
-    const url = esCorreo
-      ? `http://dev-server.local:8080/duenomascota/login`
-      : `http://dev-server.local:8080/gestor/login`;
-
-    const datos = esCorreo
-      ? { correo: user, password: contraseña }
-      : { id: user, password: contraseña };
-
-    try {
-      const respuesta = await fetch(url, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(datos)
-      });
-
-      if (respuesta.ok) {
-        if (esCorreo) {
-          navigate("/MainMenu/");
-          sessionStorage.setItem("correo", user);
-        } else {
-          navigate("/MainMenu");
-          sessionStorage.setItem("id", user);
-        }
-      } else {
-        console.error("Error en el login", respuesta.status);
-      }
-    } catch (error) {
-      console.error("Error de conexión:", error);
-    }
+    
   };
 
   return (

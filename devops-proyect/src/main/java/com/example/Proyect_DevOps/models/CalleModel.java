@@ -6,7 +6,7 @@ import jakarta.persistence.*;
 @Table(name = "calles")
 public class CalleModel {
     @Id
-    @Column(name = "idCalle")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int idCalle;
     private String nombre;
 
@@ -14,8 +14,7 @@ public class CalleModel {
     @JoinColumn(name = "idColonia")
     private ColoniaModel colonia;
     
-    public CalleModel(int idCalle, String nombre, ColoniaModel colonia) {
-        this.idCalle = idCalle;
+    public CalleModel(String nombre, ColoniaModel colonia) {
         this.nombre = nombre;
         this.colonia = colonia;
     }

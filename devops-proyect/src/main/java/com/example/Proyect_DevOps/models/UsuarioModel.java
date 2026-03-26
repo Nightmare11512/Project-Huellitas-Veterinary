@@ -19,8 +19,7 @@ public class UsuarioModel {
     @JoinColumn(name = "idRol")
     private RolModel rol;
     
-    public UsuarioModel(int idUsuario, String nombre, String paterno, String materno, String correo, String contraseña, RolModel rol) {
-        this.idUsuario = idUsuario;
+    public UsuarioModel(String nombre, String paterno, String materno, String correo, String contraseña, RolModel rol) {
         this.nombre = nombre;
         this.paterno = paterno;
         this.materno = materno;

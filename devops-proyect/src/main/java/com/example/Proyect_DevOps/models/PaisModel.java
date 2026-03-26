@@ -4,15 +4,14 @@ import jakarta.persistence.*;
 public class PaisModel {
 
     @Id
-    @Column(name = "idPais")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int idPais;
     private String nombre;
 
     public PaisModel() {
     }
 
-    public PaisModel(int idPais, String nombre) {
-        this.idPais = idPais;
+    public PaisModel(String nombre) {
         this.nombre = nombre;
     }
 

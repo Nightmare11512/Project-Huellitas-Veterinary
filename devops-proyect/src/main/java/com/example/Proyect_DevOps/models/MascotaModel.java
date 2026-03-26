@@ -22,8 +22,7 @@ public class MascotaModel {
     @JoinColumn(name = "idSucursal")
     private SucursalModel sucursal;
 
-    public MascotaModel(int idMascota, String nombre, LocalDate fechaNacimiento, double peso, int status, RazaModel raza, SucursalModel sucursal) {
-        this.idMascota = idMascota;
+    public MascotaModel(String nombre, LocalDate fechaNacimiento, double peso, int status, RazaModel raza, SucursalModel sucursal) {
         this.nombre = nombre;
         this.fechaNacimiento = fechaNacimiento;
         this.peso = peso;

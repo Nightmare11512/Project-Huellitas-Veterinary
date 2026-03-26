@@ -14,8 +14,7 @@ public class DireccionModel {
     @JoinColumn(name = "idCalle")
     private CalleModel calle;
 
-    public DireccionModel(int idDireccion, CalleModel calle) {
-        this.idDireccion = idDireccion;
+    public DireccionModel(CalleModel calle) {
         this.calle = calle;
     }
 

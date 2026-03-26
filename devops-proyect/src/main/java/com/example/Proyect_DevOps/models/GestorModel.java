@@ -17,8 +17,7 @@ public class GestorModel {
     @JoinColumn(name = "idUsuario")
     private UsuarioModel usuario;
 
-    public GestorModel(int idGestor, String rfc, double salario, UsuarioModel usuario) {
-        this.idGestor = idGestor;
+    public GestorModel(String rfc, double salario, UsuarioModel usuario) {
         this.rfc = rfc;
         this.salario = salario;
         this.usuario = usuario;
