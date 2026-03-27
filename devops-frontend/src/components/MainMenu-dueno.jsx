@@ -1,10 +1,10 @@
 import { useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
+//import { useEffect, useState } from "react";
 import "../styles/MainMenu-dueno.css";
 
 function MainMenu() {
   const navigate = useNavigate();
-  const [dueno, setDueno] = useState(null);
+  //const [dueno, setDueno] = useState(null);
   const [activeItem, setActiveItem] = useState(null); // controla item clickeado
 
   const handleLogout = () => {
@@ -12,25 +12,10 @@ function MainMenu() {
     sessionStorage.clear();
   };
 
-  useEffect(() => {
-    const correo = sessionStorage.getItem("correo"); 
-    if (!correo) return;
+  //const correo = sessionStorage.getItem("Usuario");
+  
 
-    const obtenerDatos = async () => {
-      try {
-        const host = window.location.hostname;
-        const correoCodificado = encodeURIComponent(correo);
-        const respuesta = await fetch(`http://dev-server.local:8080/duenomascota/correo/${correoCodificado}`);
-        if (!respuesta.ok) throw new Error(`HTTP error! status: ${respuesta.status}`);
-        const datos = await respuesta.json();
-        setDueno(datos);
-      } catch (error) {
-        console.error("Error al obtener los datos del dueño de mascota:", error);
-      }
-    };
 
-    obtenerDatos();
-  }, []);
 
   const menuItems = ["Dirección", "Mascotas", "Citas", "Tratamientos"];  
 

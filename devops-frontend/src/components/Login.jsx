@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { useNavigate } from "react-router-dom";
+import { redirect, useNavigate } from "react-router-dom";
 import "../styles/login.css";
 
 function Login() {
@@ -46,16 +46,47 @@ function Login() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const host = window.location.hostname;
+  
     const esCorreo = user.includes("@");
-    const esNumeroValido = /^[1-9][0-9]*$/.test(user);
-
-    if (!esCorreo || user.value == '') {
-      alert("Ingresa un ID válido o un correo válido");
+  
+    if (!esCorreo || user === '') {
+      alert("Ingresa un correo válido");
       return;
     }
-
-    
+  
+    try {
+      const response = await fetch(`http://localhost:8080/usuario/login`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          correo: user,
+          contrasena: contraseña   // 👈 sin ñ (importante)
+        })
+      });
+      const data = await response.json();
+      if (data.login === true) {
+        sessionStorage.setItem("Usuario", JSON.stringify(user));
+        alert("Login correcto");
+        fetch(`http://localhost:8080/usuario/getRol?correo=${user}`)
+        .then(res => res.json())
+        .then(data => {
+          if (data === 2) {
+            navigate("/MainMenu/");
+          } else {
+            navigate("/MainMenu");
+          }
+        })
+        .catch(err => console.error(err));
+      } else {
+        alert("Credenciales incorrectas");
+      }
+  
+    } catch (error) {
+      console.error("Error:", error);
+      alert("Error en el servidor");
+    }
   };
 
   return (
@@ -66,7 +97,7 @@ function Login() {
 
         <input
           type="text"
-          placeholder="ID de Gestor o correo"
+          placeholder="Ingrese su correo"
           value={user}
           onChange={(e) => setUser(e.target.value)}
           required
