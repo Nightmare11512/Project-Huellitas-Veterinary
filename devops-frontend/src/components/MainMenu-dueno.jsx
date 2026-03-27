@@ -1,10 +1,10 @@
 import { useNavigate } from "react-router-dom";
-//import { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import "../styles/MainMenu-dueno.css";
 
 function MainMenu() {
   const navigate = useNavigate();
-  //const [dueno, setDueno] = useState(null);
+  const [dueno, setDueno] = useState(null);
   const [activeItem, setActiveItem] = useState(null); // controla item clickeado
 
   const handleLogout = () => {
@@ -12,9 +12,33 @@ function MainMenu() {
     sessionStorage.clear();
   };
 
-  //const correo = sessionStorage.getItem("Usuario");
-  
+  useEffect(() => {
+    const correoEnSesion = sessionStorage.getItem("Usuario");
+    if (!correoEnSesion) return;
 
+    // Compatibilidad con sesiones antiguas que guardaron JSON.stringify(correo)
+    const correo = correoEnSesion.replace(/^"|"$/g, "");
+
+    fetch("http://localhost:8080/usuario/getNombre", {
+      method: "POST",
+      headers: {
+        "Content-Type": "text/plain"
+      },
+      body: correo
+    })
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error("No se pudo obtener el nombre del usuario");
+        }
+        return res.json();
+      })
+      .then((data) => {
+        setDueno(data);
+      })
+      .catch((error) => {
+        console.error("Error al cargar datos del dueño:", error);
+      });
+  }, []);
 
 
   const menuItems = ["Dirección", "Mascotas", "Citas", "Tratamientos"];  

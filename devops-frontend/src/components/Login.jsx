@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { redirect, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import "../styles/login.css";
 
 function Login() {
@@ -67,7 +67,7 @@ function Login() {
       });
       const data = await response.json();
       if (data.login === true) {
-        sessionStorage.setItem("Usuario", JSON.stringify(user));
+        sessionStorage.setItem("Usuario", user);
         alert("Login correcto");
         fetch(`http://localhost:8080/usuario/getRol?correo=${user}`)
         .then(res => res.json())
