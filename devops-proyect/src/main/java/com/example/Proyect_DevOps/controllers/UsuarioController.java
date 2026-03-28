@@ -1,10 +1,13 @@
 package com.example.Proyect_DevOps.controllers;
 
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import com.example.Proyect_DevOps.models.UsuarioModel;
 import com.example.Proyect_DevOps.services.UsuarioService;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -50,6 +53,11 @@ public class UsuarioController {
         } else {
             return ResponseEntity.status(401).body(Map.of("User found", false));
         }
+    }
+    
+    @GetMapping
+    public List<UsuarioModel> getUsuarios() {
+        return usuarioService.mostrarUsuarios();
     }
     
 }
