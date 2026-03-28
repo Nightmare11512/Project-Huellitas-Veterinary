@@ -62,7 +62,9 @@ public class UsuarioService {
         return usuarioRepository.findAll();
     }
 
-    public UsuarioModel guardaUsuario(UsuarioModel usuario){
+    public UsuarioModel guardaUsuario(){
+
+        UsuarioModel usuario = new ();
         usuario.setContraseña(passwordEncoder.encode(usuario.getContraseña()));
         return usuarioRepository.save(usuario);
     }
