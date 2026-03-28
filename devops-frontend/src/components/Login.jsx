@@ -55,7 +55,7 @@ function Login() {
     }
   
     try {
-      const response = await fetch(`http://localhost:8080/usuario/login`, {
+      const response = await fetch(`http://dev-server.local:8080/usuario/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
@@ -69,7 +69,7 @@ function Login() {
       if (data.login === true) {
         sessionStorage.setItem("Usuario", user);
         alert("Login correcto");
-        fetch(`http://localhost:8080/usuario/getRol?correo=${user}`)
+        fetch(`http://dev-server.local:8080/usuario/getRol?correo=${user}`)
         .then(res => res.json())
         .then(data => {
           if (data === 2) {

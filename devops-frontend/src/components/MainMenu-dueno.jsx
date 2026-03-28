@@ -19,7 +19,7 @@ function MainMenu() {
     // Compatibilidad con sesiones antiguas que guardaron JSON.stringify(correo)
     const correo = correoEnSesion.replace(/^"|"$/g, "");
 
-    fetch("http://localhost:8080/usuario/getNombre", {
+    fetch("http://dev-server.local:8080/usuario/getNombre", {
       method: "POST",
       headers: {
         "Content-Type": "text/plain"
@@ -49,7 +49,7 @@ function MainMenu() {
       <div className={`sidebar ${dueno ? "active" : ""}`}>
         <h2>Menú Principal</h2>
         <h3>Bienvenido, {dueno ? dueno.nombre : "Dueño de Mascota"}</h3>
-        <nav className="nav-links">
+        <nav className="nav-links" aria-label="Menú principal">
           {menuItems.map((item) => (
             <div
               key={item}
@@ -76,7 +76,7 @@ function MainMenu() {
     </div>
 
   {/* Contenido principal, si quieres agregarlo */}
-  <div className="main-content" style={{ flex: 1, padding: "20px" }}>
+  <div className="main-content">
     {/* Aquí tu contenido principal */}
   </div>
 </div>
