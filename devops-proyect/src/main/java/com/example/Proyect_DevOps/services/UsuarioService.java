@@ -35,8 +35,8 @@ public class UsuarioService {
         Optional<UsuarioModel> usuarioOpt = usuarioRepository.findByCorreo(correo);
         if (usuarioOpt.isPresent()){
             UsuarioModel usuario = usuarioOpt.get();
-            return usuario.getContraseña().equalsIgnoreCase(contrasena);
-            //return passwordEncoder.matches(contrasena, usuario.getContraseña());
+            //return usuario.getContraseña().equalsIgnoreCase(contrasena);
+            return passwordEncoder.matches(contrasena, usuario.getContraseña());
         } else {
             return false;
         }
@@ -69,8 +69,8 @@ public class UsuarioService {
         if (usuarioRepository.existsByCorreo(usuario.getCorreo())){
             throw new RuntimeException("El correo que se registro ya existe");
         } 
-
-        if (usuario.getRol() != null || usuario.getRol().getIdRol() > 0){
+        System.out.println(usuario.getRol());
+        if (usuario.getRol() == null || usuario.getRol().getIdRol() <= 0){
             throw new RuntimeException("El rol es obligatorio");
         }
         Optional<RolModel> rolOpt = rolRepository.findById(usuario.getRol().getIdRol());
