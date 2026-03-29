@@ -10,8 +10,6 @@ import com.example.Proyect_DevOps.models.RolModel;
 import com.example.Proyect_DevOps.models.UsuarioModel;
 import com.example.Proyect_DevOps.repositories.UsuarioRepository;
 
-
-
 @Service
 public class UsuarioService {
 
@@ -37,8 +35,8 @@ public class UsuarioService {
         Optional<UsuarioModel> usuarioOpt = usuarioRepository.findByCorreo(correo);
         if (usuarioOpt.isPresent()){
             UsuarioModel usuario = usuarioOpt.get();
-            //return usuario.getContraseña().equalsIgnoreCase(contrasena);
-            return passwordEncoder.matches(contrasena, usuario.getContraseña());
+            return usuario.getContraseña().equalsIgnoreCase(contrasena);
+            //return passwordEncoder.matches(contrasena, usuario.getContraseña());
         } else {
             return false;
         }
@@ -66,10 +64,22 @@ public class UsuarioService {
     public List<UsuarioModel> mostrarUsuarios(){
         return usuarioRepository.findAll();
     }
+    
+    public UsuarioModel guardaUsuario(UsuarioModel usuario){
+        if (usuarioRepository.existsByCorreo(usuario.getCorreo())){
+            throw new RuntimeException("El correo que se registro ya existe");
+        } 
 
-    public UsuarioModel guardaUsuario(String nombre, String paterno, String materno, 
-        String contraseña, Integer rol){
-        UsuarioModel usuario = new UsuarioModel(nombre,paterno,materno,correo,contraseña, rolRepository.findById());
+        if (usuario.getRol() != null || usuario.getRol().getIdRol() > 0){
+            throw new RuntimeException("El rol es obligatorio");
+        }
+        Optional<RolModel> rolOpt = rolRepository.findById(usuario.getRol().getIdRol());
+        if (rolOpt.isPresent()) {
+            RolModel rol = rolOpt.get();
+            usuario.setRol(rol);
+        } else {
+            throw new RuntimeException("El rol que ingreso no se encontro en la base de datos");
+        }
         usuario.setContraseña(passwordEncoder.encode(usuario.getContraseña()));
         return usuarioRepository.save(usuario);
     }

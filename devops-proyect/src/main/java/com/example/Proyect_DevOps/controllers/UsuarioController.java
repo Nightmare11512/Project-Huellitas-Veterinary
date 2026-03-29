@@ -60,4 +60,11 @@ public class UsuarioController {
         return usuarioService.mostrarUsuarios();
     }
     
+    @PostMapping("/guardar")
+    public ResponseEntity<UsuarioModel> postMethodName(@RequestBody UsuarioModel usuario) {
+        UsuarioModel nuevo = usuarioService.guardaUsuario(usuario);
+        return ResponseEntity.status(201).body(nuevo);
+    }
+
+    
 }

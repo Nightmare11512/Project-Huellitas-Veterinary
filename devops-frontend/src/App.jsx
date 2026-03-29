@@ -9,7 +9,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Login />} />
         <Route path="/MainMenu/" element={<MainMenu />} />
-        <Route path="/MainMenu" element={<MainMenuGestor />} />
+        <Route path="/MainMenuGestor" element={<MainMenuGestor />} />
       </Routes>
     </Router>
   );
