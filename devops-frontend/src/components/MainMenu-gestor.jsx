@@ -12,14 +12,15 @@ function MainMenuGestor() {
   return (
     <div className="main-menu-container">
       <h1>Menú Principal</h1>
+      <p>
       <input
           type="text"
           placeholder="Ingrese su correo"
           value={correo}
           onChange={(e) => setCorreo(e.target.value)}
           required
-        />
-        <p></p>
+      />
+      </p>
       <button onClick={handleLogout}>Cerrar Sesión</button>
     </div>
   );
