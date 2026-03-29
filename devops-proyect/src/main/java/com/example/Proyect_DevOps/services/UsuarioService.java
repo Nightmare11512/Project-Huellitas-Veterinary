@@ -5,6 +5,8 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import com.example.Proyect_DevOps.repositories.RolRepository;
+import com.example.Proyect_DevOps.models.RolModel;
 import com.example.Proyect_DevOps.models.UsuarioModel;
 import com.example.Proyect_DevOps.repositories.UsuarioRepository;
 
@@ -12,6 +14,9 @@ import com.example.Proyect_DevOps.repositories.UsuarioRepository;
 
 @Service
 public class UsuarioService {
+
+    @Autowired
+    private RolRepository rolRepository;
 
     @Autowired
     private UsuarioRepository usuarioRepository;
@@ -62,9 +67,9 @@ public class UsuarioService {
         return usuarioRepository.findAll();
     }
 
-    public UsuarioModel guardaUsuario(){
-
-        UsuarioModel usuario = new ();
+    public UsuarioModel guardaUsuario(String nombre, String paterno, String materno, 
+        String contraseña, Integer rol){
+        UsuarioModel usuario = new UsuarioModel(nombre,paterno,materno,correo,contraseña, rolRepository.findById());
         usuario.setContraseña(passwordEncoder.encode(usuario.getContraseña()));
         return usuarioRepository.save(usuario);
     }
