@@ -46,16 +46,48 @@ function Login() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const host = window.location.hostname;
+  
     const esCorreo = user.includes("@");
-    const esNumeroValido = /^[1-9][0-9]*$/.test(user);
-
-    if (!esCorreo || user.value == '') {
-      alert("Ingresa un ID válido o un correo válido");
+  
+    if (!esCorreo || user === '') {
+      alert("Ingresa un correo válido");
       return;
     }
-
-    
+  
+    try {
+      const response = await fetch(`http://dev-server.local:8080/usuario/login`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          correo: user,
+          contrasena: contraseña   // 👈 sin ñ (importante)
+        })
+      });
+      const data = await response.json();
+      if (data.login === true) {
+        sessionStorage.setItem("Usuario", user);
+        alert("Login correcto");
+        fetch(`http://dev-server.local:8080/usuario/getRol?correo=${user}`)
+        .then(res => res.json())
+        .then(data => {
+          console.log(data);
+          if (data === 2) {
+            navigate("/MainMenu/");
+          } else {
+            navigate("/MainMenuGestor");
+          }
+        })
+        .catch(err => console.error(err));
+      } else {
+        alert("Credenciales incorrectas");
+      }
+  
+    } catch (error) {
+      console.error("Error:", error);
+      alert("Error en el servidor");
+    }
   };
 
   return (
@@ -66,7 +98,7 @@ function Login() {
 
         <input
           type="text"
-          placeholder="ID de Gestor o correo"
+          placeholder="Ingrese su correo"
           value={user}
           onChange={(e) => setUser(e.target.value)}
           required

@@ -13,24 +13,33 @@ function MainMenu() {
   };
 
   useEffect(() => {
-    const correo = sessionStorage.getItem("correo"); 
-    if (!correo) return;
+    const correoEnSesion = sessionStorage.getItem("Usuario");
+    if (!correoEnSesion) return;
 
-    const obtenerDatos = async () => {
-      try {
-        const host = window.location.hostname;
-        const correoCodificado = encodeURIComponent(correo);
-        const respuesta = await fetch(`http://dev-server.local:8080/duenomascota/correo/${correoCodificado}`);
-        if (!respuesta.ok) throw new Error(`HTTP error! status: ${respuesta.status}`);
-        const datos = await respuesta.json();
-        setDueno(datos);
-      } catch (error) {
-        console.error("Error al obtener los datos del dueño de mascota:", error);
-      }
-    };
+    // Compatibilidad con sesiones antiguas que guardaron JSON.stringify(correo)
+    const correo = correoEnSesion.replace(/^"|"$/g, "");
 
-    obtenerDatos();
+    fetch("http://dev-server.local:8080/usuario/getNombre", {
+      method: "POST",
+      headers: {
+        "Content-Type": "text/plain"
+      },
+      body: correo
+    })
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error("No se pudo obtener el nombre del usuario");
+        }
+        return res.json();
+      })
+      .then((data) => {
+        setDueno(data);
+      })
+      .catch((error) => {
+        console.error("Error al cargar datos del dueño:", error);
+      });
   }, []);
+
 
   const menuItems = ["Dirección", "Mascotas", "Citas", "Tratamientos"];  
 
@@ -40,7 +49,7 @@ function MainMenu() {
       <div className={`sidebar ${dueno ? "active" : ""}`}>
         <h2>Menú Principal</h2>
         <h3>Bienvenido, {dueno ? dueno.nombre : "Dueño de Mascota"}</h3>
-        <nav className="nav-links">
+        <nav className="nav-links" aria-label="Menú principal">
           {menuItems.map((item) => (
             <div
               key={item}
@@ -67,7 +76,7 @@ function MainMenu() {
     </div>
 
   {/* Contenido principal, si quieres agregarlo */}
-  <div className="main-content" style={{ flex: 1, padding: "20px" }}>
+  <div className="main-content">
     {/* Aquí tu contenido principal */}
   </div>
 </div>
