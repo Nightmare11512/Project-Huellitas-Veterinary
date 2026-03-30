@@ -13,9 +13,11 @@ public class DireccionModel {
     @ManyToOne
     @JoinColumn(name = "idCalle")
     private CalleModel calle;
+    private int codigoPostal;
 
-    public DireccionModel(CalleModel calle) {
+    public DireccionModel(CalleModel calle, int codigoPostal) {
         this.calle = calle;
+        this.codigoPostal = codigoPostal;
     }
 
     public DireccionModel() {
@@ -37,8 +39,16 @@ public class DireccionModel {
         this.calle = calle;
     }
     
+    public int getCodigoPostal(){
+        return codigoPostal;
+    }
+
+    public void setCodigoPostal(int codigoPostal){
+        this.codigoPostal = codigoPostal;
+    }
+
     @Override
     public String toString() {
-        return "idDireccion=" + idDireccion + ", calle=" + calle.getIdCalle();
+        return "idDireccion=" + idDireccion + ", calle=" + calle.getIdCalle()+ ", codigoPostal=" + codigoPostal;
     }
 }

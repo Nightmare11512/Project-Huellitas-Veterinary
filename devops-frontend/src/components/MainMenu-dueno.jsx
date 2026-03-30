@@ -6,6 +6,7 @@ function MainMenu() {
   const navigate = useNavigate();
   const [dueno, setDueno] = useState(null);
   const [activeItem, setActiveItem] = useState(null); // controla item clickeado
+  const [mascota, setMascota] = useState("");
 
   const handleLogout = () => {
     navigate("/");
@@ -41,7 +42,11 @@ function MainMenu() {
   }, []);
 
 
-  const menuItems = ["Dirección", "Mascotas", "Citas", "Tratamientos"];  
+  const menuItems = ["Mascotas", "Citas", "Tratamientos"];  
+
+  useEffect(()=> {
+    const 
+  })
 
   return (
     <div className="main-menu" style={{ display: "flex" }}>
@@ -66,13 +71,25 @@ function MainMenu() {
 
       {/* Sidebar secundaria */}
     <div className={`sidebar secondary ${activeItem ? "active" : ""}`}>
-      {activeItem ? (
+      {activeItem && (
         <>
       <h2>{activeItem}</h2>
-      <p>Contenido de {activeItem}</p>
+
+      {activeItem === "Macota" && (
+        <form>
+          <p>Gestion de {activeItem}</p>
+          <input type="text" placeholder="Nombre"/>
+          <input type="date" placeholder="Fecha de Nacimiento"/>
+          <input type="number" placeholder="Peso"/>
+          <select id="Especie">
+            <option value="0">Seleccione la Especie</option>
+          </select>
+        </form>
+      )}
+
       <button className="button-back" onClick={() => setActiveItem(null)}>Volver</button>
         </>
-      ) : null}
+      )}
     </div>
 
   {/* Contenido principal, si quieres agregarlo */}
