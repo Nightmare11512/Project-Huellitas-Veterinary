@@ -6,7 +6,8 @@ function MainMenu() {
   const navigate = useNavigate();
   const [dueno, setDueno] = useState(null);
   const [activeItem, setActiveItem] = useState(null); // controla item clickeado
-  const [mascota, setMascota] = useState("");
+  const [mascota, setMascota] = useState([]);
+  const correo = sessionStorage.getItem("Usuario");
 
   const handleLogout = () => {
     navigate("/");
@@ -40,13 +41,14 @@ function MainMenu() {
         console.error("Error al cargar datos del dueño:", error);
       });
   }, []);
-
-
   const menuItems = ["Mascotas", "Citas", "Tratamientos"];  
 
   useEffect(()=> {
-    const 
-  })
+    fetch(`http://dev-server.local:8080/mascota/usuario/${correo}`)
+    .then(res => res.json())
+    .then(data => setMascota(data))
+    .catch(err => console.error(err));
+  }, [correo])
 
   return (
     <div className="main-menu" style={{ display: "flex" }}>
@@ -75,15 +77,17 @@ function MainMenu() {
         <>
       <h2>{activeItem}</h2>
 
-      {activeItem === "Macota" && (
+      {activeItem === "Mascotas" && (
         <form>
           <p>Gestion de {activeItem}</p>
-          <input type="text" placeholder="Nombre"/>
-          <input type="date" placeholder="Fecha de Nacimiento"/>
-          <input type="number" placeholder="Peso"/>
-          <select id="Especie">
-            <option value="0">Seleccione la Especie</option>
-          </select>
+          <p>
+            <select className="menuSeleccionable">
+              <option className="itemsX" value="">Seleccione su mascota</option>
+              {mascota.map(mascota => (
+                <option className="itemsX" key={mascota.id} value={mascota.id}>{mascota.nombre}</option>
+              ))}
+            </select>
+          </p>
         </form>
       )}
 

@@ -114,3 +114,20 @@ html body {
   border-radius: 5px;
   cursor: pointer;
 }
+
+.menuSeleccionable{
+  background-color: transparent;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  padding: 5px;
+  transition: 0.3s;
+}
+
+.menuSeleccionable:focus-visible{
+  outline: none;
+}
+
+.menuSeleccionable:hover{
+  background-color: #4b5563;
+}

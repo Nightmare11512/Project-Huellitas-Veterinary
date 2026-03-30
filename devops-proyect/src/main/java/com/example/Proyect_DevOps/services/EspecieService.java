@@ -12,7 +12,7 @@ public class EspecieService {
     @Autowired
     private EspecieRepository especieRepository;
 
-    private List<EspecieModel> mostrarEspecies(){
+    public List<EspecieModel> mostrarEspecies(){
         return especieRepository.findAll();
     }
 }
