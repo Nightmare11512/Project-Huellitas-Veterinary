@@ -99,7 +99,8 @@ function MainMenu() {
                 <div>Peso: {mascotaSeleccionadaObj?.peso}Kg</div>
                 <div>Fecha de nacimiento: {mascotaSeleccionadaObj?.fechaNacimiento}</div>
                 <div>Especie: {mascotaSeleccionadaObj?.raza.especie.nombre}</div>
-                <div className="identado"> Raza: {mascotaSeleccionadaObj?.raza.nombre}</div>
+                <div className="identado">Raza: {mascotaSeleccionadaObj?.raza.nombre}</div>
+                <div></div>
         </form>
         </>
       )}

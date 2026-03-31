@@ -72,10 +72,11 @@ function Login() {
         fetch(`http://dev-server.local:8080/usuario/getRol?correo=${user}`)
         .then(res => res.json())
         .then(data => {
-          console.log(data);
           if (data === 2) {
             navigate("/MainMenu/");
-          } else {
+          } else if (data === 1) {
+            navigate("/MainMenuAdministrador");
+          } else  if (data === 3){
             navigate("/MainMenuGestor");
           }
         })
