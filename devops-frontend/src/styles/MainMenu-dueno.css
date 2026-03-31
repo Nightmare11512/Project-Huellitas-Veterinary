@@ -129,5 +129,16 @@ html body {
 }
 
 .menuSeleccionable:hover{
-  background-color: #4b5563;
+  background-color: darkgray;
+}
+
+.formulario{
+  background-color: lightgray;
+  border: none;
+  border-radius: 5px;
+  padding: 5px;
+}
+
+.identado{
+  margin-left: 20px;
 }

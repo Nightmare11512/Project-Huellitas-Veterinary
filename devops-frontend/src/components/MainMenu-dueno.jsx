@@ -50,6 +50,12 @@ function MainMenu() {
     .catch(err => console.error(err));
   }, [correo])
 
+  const [selectedMascota, setSelectedMascota] = useState(null);
+  const mascotaSeleccionadaObj = mascota.find(
+  m =>  m.idMascota == selectedMascota);
+
+
+
   return (
     <div className="main-menu" style={{ display: "flex" }}>
       {/* Sidebar principal */}
@@ -78,20 +84,27 @@ function MainMenu() {
       <h2>{activeItem}</h2>
 
       {activeItem === "Mascotas" && (
-        <form>
-          <p>Gestion de {activeItem}</p>
-          <p>
-            <select className="menuSeleccionable">
-              <option className="itemsX" value="">Seleccione su mascota</option>
-              {mascota.map(mascota => (
-                <option className="itemsX" key={mascota.id} value={mascota.id}>{mascota.nombre}</option>
-              ))}
-            </select>
-          </p>
+        <>
+        <p>Gestion de {activeItem}</p>
+        <form className="formulario">
+                <div>
+                  <select className="menuSeleccionable" onChange={(e) => setSelectedMascota(e.target.value)}>
+                    <option className="itemsX" value="">Seleccione su mascota</option>
+                    {mascota.map(m => (
+                      <option className="itemsX" key={m.idMascota} value={m.idMascota}>{m.nombre}</option>
+                    ))}
+                  </select>
+                </div>
+                <div>Nombre: {mascotaSeleccionadaObj?.nombre}</div>
+                <div>Peso: {mascotaSeleccionadaObj?.peso}Kg</div>
+                <div>Fecha de nacimiento: {mascotaSeleccionadaObj?.fechaNacimiento}</div>
+                <div>Especie: {mascotaSeleccionadaObj?.raza.especie.nombre}</div>
+                <div className="identado"> Raza: {mascotaSeleccionadaObj?.raza.nombre}</div>
         </form>
+        </>
       )}
 
-      <button className="button-back" onClick={() => setActiveItem(null)}>Volver</button>
+      <p><button className="button-back" onClick={() => setActiveItem(null)}>Volver</button></p>
         </>
       )}
     </div>
