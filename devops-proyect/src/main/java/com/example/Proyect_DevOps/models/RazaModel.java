@@ -38,6 +38,14 @@ public class RazaModel {
     public void setNombre(String nombre) {
         this.nombre = nombre;
     }
+
+    public EspecieModel getEspecie(){
+        return especie;
+    }
+
+    public void setEspecie(EspecieModel especie){
+        this.especie = especie;
+    }
     
     @Override
     public String toString() {

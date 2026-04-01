@@ -2,6 +2,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Login from "./components/Login";
 import MainMenuGestor from "./components/MainMenu-gestor";
 import MainMenu from "./components/MainMenu-dueno";
+import MainMenuAdministrador from "./components/MainMenu-administrador";
 
 function App() {
   return (
@@ -10,6 +11,7 @@ function App() {
         <Route path="/" element={<Login />} />
         <Route path="/MainMenu/" element={<MainMenu />} />
         <Route path="/MainMenuGestor" element={<MainMenuGestor />} />
+        <Route path="/MainMenuAdministrador" element={<MainMenuAdministrador />} />
       </Routes>
     </Router>
   );

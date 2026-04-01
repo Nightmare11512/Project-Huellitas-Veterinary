@@ -1,5 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
+import "sweetalert2/dist/sweetalert2.min.css";
 import "../styles/login.css";
 
 function Login() {
@@ -8,6 +10,7 @@ function Login() {
   const [mostrar, setMostrar] = useState(false); // controla mostrar/ocultar
   const navigate = useNavigate();
   const audioRef = useRef(null);
+
 
   // 🎵 Música mientras Login está montado
   useEffect(() => {
@@ -68,25 +71,38 @@ function Login() {
       const data = await response.json();
       if (data.login === true) {
         sessionStorage.setItem("Usuario", user);
-        alert("Login correcto");
+        Swal.fire({
+          title: "Login correcto",
+          text: "Bienvenido, has iniciado sesión correctamente",
+          icon: "success"
+        });
         fetch(`http://dev-server.local:8080/usuario/getRol?correo=${user}`)
         .then(res => res.json())
         .then(data => {
-          console.log(data);
           if (data === 2) {
             navigate("/MainMenu/");
-          } else {
+          } else if (data === 1) {
+            navigate("/MainMenuAdministrador");
+          } else  if (data === 3){
             navigate("/MainMenuGestor");
           }
         })
         .catch(err => console.error(err));
       } else {
-        alert("Credenciales incorrectas");
+        Swal.fire({
+          title: "Credenciales Incorrectas",
+          text: "Por favor, ingrese sus credenciales nuevamente",
+          icon: "error"
+        });
       }
   
     } catch (error) {
       console.error("Error:", error);
-      alert("Error en el servidor");
+      Swal.fire({
+        title: "Credenciales Incorrectas",
+        text: "Por favor, ingrese sus credenciales nuevamente",
+        icon: "error"
+      });
     }
   };
 

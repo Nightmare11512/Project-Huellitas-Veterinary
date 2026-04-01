@@ -22,13 +22,18 @@ public class MascotaModel {
     @JoinColumn(name = "idSucursal")
     private SucursalModel sucursal;
 
-    public MascotaModel(String nombre, LocalDate fechaNacimiento, double peso, int status, RazaModel raza, SucursalModel sucursal) {
+    @ManyToOne
+    @JoinColumn(name = "idUsuario")
+    private UsuarioModel usuario;
+
+    public MascotaModel(String nombre, LocalDate fechaNacimiento, double peso, int status, RazaModel raza, SucursalModel sucursal, UsuarioModel usuario) {
         this.nombre = nombre;
         this.fechaNacimiento = fechaNacimiento;
         this.peso = peso;
         this.status = status;
         this.raza = raza;
         this.sucursal = sucursal;
+        this.usuario = usuario;
     }
 
     public MascotaModel() {
@@ -90,8 +95,18 @@ public class MascotaModel {
         this.sucursal = sucursal;
     }
     
+    public UsuarioModel getUsuario(){
+        return usuario;
+    }
+
+    public void setUsuario(UsuarioModel usuario){
+        this.usuario = usuario;
+    }
+
     @Override
     public String toString() {
-        return "idMascota=" + idMascota + ", nombre=" + nombre + ", fechaNacimiento=" + fechaNacimiento + ", peso=" + peso + ", status=" + status + ", raza=" + raza.getIdRaza() + ", sucursal=" + sucursal.getIdSucursal();
+        return "idMascota=" + idMascota + ", nombre=" + nombre + ", fechaNacimiento=" + fechaNacimiento + 
+        ", peso=" + peso + ", status=" + status + ", raza=" + raza.getIdRaza() + ", sucursal=" + sucursal.getIdSucursal() + 
+        ", usuario=" + usuario.getIdUsuario();
     }   
 }

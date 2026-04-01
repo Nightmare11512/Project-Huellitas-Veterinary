@@ -26,7 +26,8 @@ html body {
 }
 
 /* Sidebar principal */
-.sidebar {
+.sidebar.primary {
+  flex-shrink: 0;
   position: fixed;
   top: 20px;
   left: -250px; /* fuera de pantalla al inicio */
@@ -44,7 +45,9 @@ html body {
 
 /* Sidebar secundaria */
 .sidebar.secondary {
+  flex-shrink: 0;
   width: 200px;
+  height: calc(100% - 40px);
   background-color: #8f8f8f;
   border-radius: 15px;
   padding: 15px;
@@ -54,10 +57,11 @@ html body {
   left: -220px; /* fuera de pantalla */
   transition: left 0.5s ease, opacity 0.5s ease;
   opacity: 0;
+  z-index: 100;
 }
 
 /* Clase activa para mostrar sidebar principal */
-.sidebar.active {
+.sidebar.primary.active {
   left: 20px;
   opacity: 1;
 }
@@ -69,7 +73,7 @@ html body {
 }
 
 /* Items internos */
-.sidebar .menu-item,
+.sidebar.primary .menu-item,
 .sidebar.secondary .menu-item {
   display: block;
   margin-bottom: 15px;
@@ -80,9 +84,10 @@ html body {
   transition: background-color 0.3s;
 }
 
-.sidebar .menu-item:hover,
+.sidebar.primary .menu-item:hover,
 .sidebar.secondary .menu-item:hover {
   background-color: #4b5563;
+  color: white
 }
 
 .sidebar.secondary p {
@@ -94,6 +99,34 @@ html body {
   opacity: 1;
 }
 
+  .sidebar.tertiary{
+    position: fixed;
+    top: 20px;
+    right: -110%; /* fuera de pantalla */
+    width: 755px;
+    height: calc(100% - 40px);
+    background-color: #d3d3d3;
+    border-radius: 15px;
+    padding: 20px;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+    transition: right 0.5s ease, opacity 0.5s ease;
+    opacity: 0;
+  }
+
+  .sidebar.tertiary.active{
+    right: 20px; /* aparece desde la derecha */
+    opacity: 1;
+  }
+
+  .sidebar.tertiary p {
+    opacity: 0;
+    transition: opacity 0.5s ease;
+  }
+
+  .sidebar.tertiary.active p {
+    opacity: 1;
+  }
+
 .button-back{
   position: absolute;
   padding: 10px 15px;
@@ -103,6 +136,11 @@ html body {
   border-radius: 5px;
   cursor: pointer;
   z-index: 110; /* por encima de las sidebars */
+  transition: 0.3s;
+}
+
+.button-back:hover{
+  background-color: #4b5563;
 }
 
 .btn{
@@ -113,4 +151,47 @@ html body {
   border: none;
   border-radius: 5px;
   cursor: pointer;
+  transition: 0.3s;
+}
+
+.btn:hover{
+  background-color: #4b5563;
+}
+
+.menuSeleccionable{
+  background-color: transparent;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  padding: 5px;
+  transition: 0.3s;
+}
+
+.menuSeleccionable:focus-visible{
+  outline: none;
+}
+
+.menuSeleccionable:hover{
+  background-color: darkgray;
+}
+
+.formulario{
+  background-color: lightgray;
+  border: none;
+  border-radius: 5px;
+  padding: 5px;
+}
+
+.identado{
+  margin-left: 20px;
+  font-size: 13px;
+}
+
+.font-size-1{
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.font-size-2{
+  font-size: 14px;
 }

@@ -49,9 +49,6 @@ function MainMenuGestor() {
       console.log("Usuario creado:", data);
       alert("Usuario creado con éxito");
 
-      // opcional: redirigir después de crear
-      navigate("/MainMenu"); 
-
     } catch (err) {
       console.error("Error al enviar el usuario:", err);
       alert("Error de conexión con el backend");

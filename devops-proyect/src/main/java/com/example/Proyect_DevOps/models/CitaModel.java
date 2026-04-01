@@ -1,6 +1,7 @@
 package com.example.Proyect_DevOps.models;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.ArrayList;
 import jakarta.persistence.*;
@@ -22,10 +23,15 @@ public class CitaModel {
     private MascotaModel mascotaModel;
 
     @ManyToOne
-    @JoinColumn(name = "IdUsuario")
-    private UsuarioModel usuarioModel;
+    @JoinColumn(name = "IdUsuarioM")
+    private UsuarioModel usuarioMascota;
 
+    @ManyToOne
+    @JoinColumn(name = "IdUsuarioV")
+    private UsuarioModel usuarioVeterinario;
     private LocalDate fecha;
+    private LocalTime entradaAgendada;
+    private LocalTime horaSalida;
     private int estado_cita;
 
     @ManyToMany
@@ -33,11 +39,15 @@ public class CitaModel {
     inverseJoinColumns = @JoinColumn(name = "IdSucursal"))
     public List<ServicioModel> servicios = new ArrayList<>();
 
-    public CitaModel(SucursalModel sucursalModel, MascotaModel mascotaModel, UsuarioModel usuarioModel, LocalDate fecha, int estado_cita){
+    public CitaModel(SucursalModel sucursalModel, MascotaModel mascotaModel, UsuarioModel usuarioMascota, 
+        UsuarioModel usuarioVeterinario, LocalDate fecha, LocalTime entradaAgendada, int estado_cita){
         this.sucursalModel = sucursalModel;
         this.mascotaModel = mascotaModel;
-        this.usuarioModel = usuarioModel;
+        this.usuarioMascota = usuarioMascota;
+        this.usuarioVeterinario = usuarioVeterinario;
         this.fecha = fecha;
+        this.entradaAgendada = entradaAgendada;
+        this.horaSalida = null;
         this.estado_cita = estado_cita;
     }
 
@@ -68,12 +78,20 @@ public class CitaModel {
         this.mascotaModel = mascotaModel;
     }
 
-    public UsuarioModel getUsuarioModel(){
-        return usuarioModel;
+    public UsuarioModel getUsuarioMascota(){
+        return usuarioMascota;
     }
 
-    public void setUsuarioModel(UsuarioModel usuarioModel){
-        this.usuarioModel = usuarioModel;
+    public void setUsuarioMascota(UsuarioModel usuarioMascota){
+        this.usuarioMascota = usuarioMascota;
+    }
+
+    public UsuarioModel getUsuarioVeterinario(){
+        return usuarioVeterinario;
+    }
+
+    public void setUsuarioVeterinario(UsuarioModel usuarioVeterinario){
+        this.usuarioVeterinario = usuarioVeterinario;
     }
 
     public LocalDate getFecha(){
@@ -82,6 +100,22 @@ public class CitaModel {
 
     public void setFecha(LocalDate fecha){
         this.fecha = fecha;
+    }
+
+    public LocalTime getEntradaAgendada(){
+        return entradaAgendada;
+    }
+
+    public void setEntradaAgendada(LocalTime entradaAgendada){
+        this.entradaAgendada = entradaAgendada;
+    }
+
+    public LocalTime getHoraSalida(){
+        return horaSalida;
+    }
+
+    public void setHoraSalida(LocalTime horaSalida){
+        this.horaSalida = horaSalida;
     }
 
     public int getEstadoCita(){
@@ -105,7 +139,9 @@ public class CitaModel {
         return "idCita=" + idCita + 
         ", idSucursal=" + sucursalModel.getIdSucursal() + 
         ", idMascota=" + mascotaModel.getIdMascota() + 
-        ", idUsuario=" + usuarioModel.getIdUsuario() + 
-        ", fecha=" + fecha.toString() + ", estado_cita=" + estado_cita;
+        ", idUsuarioM=" + usuarioMascota.getIdUsuario() + 
+        ", idUsuarioV=" + usuarioVeterinario.getIdUsuario() +
+        ", fecha=" + fecha.toString() + 
+        ", estado_cita=" + estado_cita;
     }
 }
