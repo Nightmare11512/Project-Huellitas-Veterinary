@@ -27,6 +27,7 @@ html body {
 
 /* Sidebar principal */
 .sidebar.primary {
+  flex-shrink: 0;
   position: fixed;
   top: 20px;
   left: -250px; /* fuera de pantalla al inicio */
@@ -44,6 +45,7 @@ html body {
 
 /* Sidebar secundaria */
 .sidebar.secondary {
+  flex-shrink: 0;
   width: 200px;
   height: calc(100% - 40px);
   background-color: #8f8f8f;
@@ -55,6 +57,7 @@ html body {
   left: -220px; /* fuera de pantalla */
   transition: left 0.5s ease, opacity 0.5s ease;
   opacity: 0;
+  z-index: 100;
 }
 
 /* Clase activa para mostrar sidebar principal */
