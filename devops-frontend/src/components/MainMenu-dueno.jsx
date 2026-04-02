@@ -23,8 +23,14 @@ const TablaCitas = ({ citas }) => {
             <tr key={cita.idCita}>
               <td>{cita.fecha}</td>
               <td>
-                <span className={`estado ${cita.estado_cita === 1 ? "completado" : "pendiente"}`}>
-                  {cita.estado_cita === 1 ? "Completado" : "Pendiente"}
+                <span className={`estado ${
+                  cita.estado_cita === 1 ? "completado" 
+                  : cita.estado_cita === 2 ? "pendiente" 
+                  : "cancelado"
+                }`}>
+                  {cita.estado_cita === 1 ? "Completado" 
+                  : cita.estado_cita === 2 ? "Pendiente" 
+                  : "Cancelado"}
                 </span>
               </td>
               <td>{cita.entradaAgendada}</td>
@@ -42,10 +48,14 @@ function MainMenu() {
   const [dueno, setDueno] = useState(null);
   const [activeItem, setActiveItem] = useState(null);
   const [mascota, setMascota] = useState([]);
-  const [selectedMascota, setSelectedMascota] = useState(null);
+  const [selectedMascota, setSelectedMascota] = useState("");
   const [citas, setCitas] = useState([]);
   const [refresh, setRefresh] = useState(false);
   const correo = sessionStorage.getItem("Usuario")?.replace(/^"|"$/g, "");
+  const [loading, setLoading] = useState(false);
+  const menuItems = ["Mascotas", "Citas", "Tratamientos"];
+  const [fecha, setFecha] = useState("");
+  const [hora, sethora] = useState("");
 
   const mascotaSeleccionadaObj = mascota.find((m) => m.idMascota == selectedMascota);
 
@@ -88,19 +98,26 @@ function MainMenu() {
 
   useEffect(() => {
     if (!correo || !mascotaSeleccionadaObj) return;
-    fetch(`http://dev-server.local:8080/cita/${correo}/${mascotaSeleccionadaObj.idMascota}`)
+  
+    const fetchCitas = fetch(`http://dev-server.local:8080/cita/${correo}/${mascotaSeleccionadaObj.idMascota}`)
       .then((res) => {
         if (!res.ok) throw new Error("Error al obtener citas");
         return res.json();
+      });
+  
+    const swalTimer = new Promise((resolve) => setTimeout(resolve, 2000));
+  
+    Promise.all([fetchCitas, swalTimer])
+      .then(([data]) => {
+        setCitas(Array.isArray(data) ? data : []);
+        setLoading(false);
       })
-      .then((data) => setCitas(Array.isArray(data) ? data : []))
       .catch((err) => {
         console.error(err);
         setCitas([]);
+        setLoading(false);
       });
   }, [selectedMascota, refresh]);
-
-  const menuItems = ["Mascotas", "Citas", "Tratamientos"];
 
   return (
     <div className="main-menu" style={{ display: "flex" }}>
@@ -113,9 +130,11 @@ function MainMenu() {
             <div
               key={item}
               className={`menu-item ${activeItem === item ? "active" : ""}`}
-              onClick={() => setActiveItem(item)}
-              style={{ cursor: "pointer", margin: "5px 0" }}
-            >
+              onClick={() => {setActiveItem(item); 
+                              setSelectedMascota("");
+                              setFecha("");
+                              sethora("");}}
+              style={{ cursor: "pointer", margin: "5px 0" }}>
               {item}
             </div>
           ))}
@@ -134,7 +153,26 @@ function MainMenu() {
                   <div>
                     <select
                       className="menuSeleccionable"
-                      onChange={(e) => setSelectedMascota(e.target.value)}
+                      value={selectedMascota}
+                      onChange={(e) => {
+                        const valor = e.target.value;
+                        setSelectedMascota(valor);
+                        if (valor !== "") {
+                          setLoading(true);
+                          Swal.fire({
+                            title: "Buscando datos espere",
+                            text: "Buscando espere...",
+                            icon: "info",
+                            timerProgressBar: true,
+                            timer: 2000,
+                            showConfirmButton: false
+                          }).then(() => {
+                            setLoading(false); // <-- se desactiva cuando el Swal cierra
+                          });
+                        } else {
+                          setLoading(false);
+                        }
+                      }}
                     >
                       <option value="">Seleccione su mascota</option>
                       {mascota.map((m) => (
@@ -144,6 +182,7 @@ function MainMenu() {
                   </div>
 
                   {activeItem === "Mascotas" && (
+                    loading ? <p>Cargando...</p> : (
                     <>
                       <div className="font-size-1">Nombre: {mascotaSeleccionadaObj?.nombre}</div>
                       <div className="font-size-1">
@@ -154,12 +193,30 @@ function MainMenu() {
                       <div className="font-size-1">Especie: {mascotaSeleccionadaObj?.raza.especie.nombre}</div>
                       <div className="identado">Raza: {mascotaSeleccionadaObj?.raza.nombre}</div>
                     </>
+                    )
+                  )}
+
+                  {activeItem === "Citas" && (
+                    <>
+                    <p></p>
+                    <div className="EntradaTxt">Indique una fecha para agendar</div>
+                    <input type="date" value={fecha} onChange={(e) => {setFecha(e.target.value)}} placeholder="Indique una fecha" className="Entrada"/>
+                    <p></p>
+                    <div className="EntradaTxt">Indique una hora para agendar</div>
+                    <input type="time" value={hora} onChange={(e) => {sethora(e.target.value)}} placeholder="Indique su hora de llegada" className="Entrada"/>
+                    <p></p>
+
+                    <button className="buton" onClick={() => {}}>Crear cita</button>
+                    </>
                   )}
                 </form>
               </>
             )}
             <p>
-              <button className="button-back" onClick={() => { setActiveItem(null); setSelectedMascota(null); }}>
+              <button className="button-back" onClick={() => { setActiveItem(null); 
+                                                               setSelectedMascota("");
+                                                               setFecha("");
+                                                               sethora("");}}>
                 Volver
               </button>
             </p>
@@ -170,7 +227,9 @@ function MainMenu() {
       <div className={`sidebar tertiary ${activeItem === "Citas" || activeItem === "Tratamientos" ? "active" : ""}`}>
         <h2>Historial de {activeItem}</h2>
         {activeItem === "Citas" && (
+          loading ? <p>Cargando...</p> : (
           <TablaCitas citas={citas} />
+          )
         )}
       </div>
 

@@ -2,6 +2,7 @@ package com.example.Proyect_DevOps.controllers;
 
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,11 +27,18 @@ public class CitaController {
     private MascotaRepository mascotaRepository;
 
     @GetMapping("/cita/{correo}/{idMascota}")
-    public List<CitaModel> getListaDeCitasSegunUsuarioYMascota(@PathVariable String correo, @PathVariable int idMascota){
-        UsuarioModel usuario = usuarioRepository.findByCorreo(correo).orElseThrow(()
-         -> new RuntimeException("Usuario no encontrado"));
-        MascotaModel mascota = mascotaRepository.findById(idMascota).orElseThrow(()
-         -> new RuntimeException("Mascota no encontrada"));
-        return citaService.getCitasByUsuarioAndMascota(usuario, mascota);
+    public ResponseEntity<List<CitaModel>> getListaDeCitasSegunUsuarioYMascota(
+            @PathVariable String correo, 
+            @PathVariable int idMascota){
+        try {
+            UsuarioModel usuario = usuarioRepository.findByCorreo(correo)
+                    .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+            MascotaModel mascota = mascotaRepository.findById(idMascota)
+                    .orElseThrow(() -> new RuntimeException("Mascota no encontrada"));
+            List<CitaModel> citas = citaService.getCitasByUsuarioAndMascota(usuario, mascota);
+            return ResponseEntity.ok(citas);
+        } catch (RuntimeException e) {
+            return ResponseEntity.notFound().build();
+        }
     }
 }
