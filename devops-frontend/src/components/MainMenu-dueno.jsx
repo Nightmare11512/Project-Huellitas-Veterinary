@@ -5,42 +5,46 @@ import "sweetalert2/dist/sweetalert2.min.css";
 import "../styles/MainMenu-dueno.css";
 
 const TablaCitas = ({ citas }) => {
-  if (!citas || !Array.isArray(citas) || citas.length === 0) 
+  if (!citas || !Array.isArray(citas)) {
     return <p>No hay citas registradas.</p>;
-  return (
-    <div className="tabla-container">
-      <table className="tabla-citas">
-        <thead>
-          <tr>
-            <th>Fecha</th>
-            <th>Estado</th>
-            <th>Entrada Agendada</th>
-            <th>Hora de Salida</th>
-          </tr>
-        </thead>
-        <tbody>
-          {citas.map((cita) => (
-            <tr key={cita.idCita}>
-              <td>{cita.fecha}</td>
-              <td>
-                <span className={`estado ${
-                  cita.estado_cita === 1 ? "completado" 
-                  : cita.estado_cita === 2 ? "pendiente" 
-                  : "cancelado"
-                }`}>
-                  {cita.estado_cita === 1 ? "Completado" 
-                  : cita.estado_cita === 2 ? "Pendiente" 
-                  : "Cancelado"}
-                </span>
-              </td>
-              <td>{cita.entradaAgendada}</td>
-              <td>{cita.estado_cita === 1 ? cita.horaSalida : "—"}</td>
+  } else if (citas.length === 0) {
+    return <p>No hay a seleccionado ninguna mascota.</p>;
+  } else {
+    return (
+      <div className="tabla-container">
+        <table className="tabla-citas">
+          <thead>
+            <tr>
+              <th>Fecha</th>
+              <th>Estado</th>
+              <th>Entrada Agendada</th>
+              <th>Hora de Salida</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
-  );
+          </thead>
+          <tbody>
+            {citas.map((cita) => (
+              <tr key={cita.idCita}>
+                <td>{cita.fecha}</td>
+                <td>
+                  <span className={`estado ${
+                    cita.estado_cita === 1 ? "completado" 
+                    : cita.estado_cita === 2 ? "pendiente" 
+                    : "cancelado"
+                  }`}>
+                    {cita.estado_cita === 1 ? "Completado" 
+                    : cita.estado_cita === 2 ? "Pendiente" 
+                    : "Cancelado"}
+                  </span>
+                </td>
+                <td>{cita.entradaAgendada}</td>
+                <td>{cita.estado_cita === 1 ? cita.horaSalida : "—"}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    );
+  }
 };
 
 function MainMenu() {
@@ -58,7 +62,7 @@ function MainMenu() {
   const [fecha, setFecha] = useState("");
   const [hora, sethora] = useState("");
 
-  const mascotaSeleccionadaObj = mascota.find((m) => m.idMascota == selectedMascota);
+  const mascotaSeleccionadaObj = mascota.find((m) => m.idMascota === Number(selectedMascota));
 
   const handleLogout = () => {
     Swal.fire({
@@ -87,7 +91,7 @@ function MainMenu() {
       .then((res) => res.json())
       .then((data) => setDueno(data))
       .catch((err) => console.error(err));
-  }, []);
+  }, [correo]);
 
   useEffect(() => {
     if (!correo) return;
@@ -118,7 +122,7 @@ function MainMenu() {
         setCitas([]);
         setLoading(false);
       });
-  }, [selectedMascota, refresh]);
+  }, [selectedMascota, refresh, correo, mascotaSeleccionadaObj]);
 
   return (
     <div className="main-menu" style={{ display: "flex" }}>
@@ -140,7 +144,7 @@ function MainMenu() {
             </div>
           ))}
         </nav>
-        <button onClick={handleLogout} className="btn">Cerrar Sesión</button>
+        <button type="button" onClick={handleLogout} className="btn">Cerrar Sesión</button>
       </div>
 
       <div className={`sidebar secondary ${activeItem ? "active" : ""}`}>
@@ -168,7 +172,7 @@ function MainMenu() {
                             timer: 2000,
                             showConfirmButton: false
                           }).then(() => {
-                            setLoading(false); // <-- se desactiva cuando el Swal cierra
+                            setLoading(false);
                           });
                         } else {
                           setLoading(false);
@@ -206,15 +210,14 @@ function MainMenu() {
                     <div className="EntradaTxt">Indique una hora para agendar</div>
                     <input type="time" value={hora} onChange={(e) => {sethora(e.target.value)}} placeholder="Indique su hora de llegada" className="Entrada"/>
                     <p></p>
-
-                    <button className="buton" onClick={() => {}}>Crear cita</button>
+                    <button type="button" className="buton" onClick={() => {}}>Crear cita</button>
                     </>
                   )}
                 </form>
               </>
             )}
             <p>
-              <button className="button-back" onClick={() => { setActiveItem(null); 
+              <button type="button" className="button-back" onClick={() => { setActiveItem(null); 
                                                                setSelectedMascota("");
                                                                setFecha("");
                                                                sethora("");}}>
