@@ -50,6 +50,7 @@ function MainMenu() {
   const [mascota, setMascota] = useState([]);
   const [selectedMascota, setSelectedMascota] = useState("");
   const [citas, setCitas] = useState([]);
+  // eslint-disable-next-line no-unused-vars
   const [refresh, setRefresh] = useState(false);
   const correo = sessionStorage.getItem("Usuario")?.replace(/^"|"$/g, "");
   const [loading, setLoading] = useState(false);
