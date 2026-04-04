@@ -8,7 +8,7 @@ const TablaCitas = ({ citas }) => {
   if (!citas || !Array.isArray(citas)) {
     return <p>No hay citas registradas.</p>;
   } else if (citas.length === 0) {
-    return <p>No hay a seleccionado ninguna mascota.</p>;
+    return <p>No hay citas registradas.</p>;
   } else {
     return (
       <div className="tabla-container">
