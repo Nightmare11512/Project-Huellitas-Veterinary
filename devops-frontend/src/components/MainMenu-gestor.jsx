@@ -111,6 +111,7 @@ function MainMenuGestor() {
         <option value="1">Administrador</option>
         <option value="2">Cliente</option>
         <option value="3">Gestor</option>
+        <option value="4">Veterinario</option>
       </select></p>
       <p><button onClick={handleSubmit}>Crear usuario</button></p>
       <button onClick={handleLogout}>Cerrar Sesión</button>
