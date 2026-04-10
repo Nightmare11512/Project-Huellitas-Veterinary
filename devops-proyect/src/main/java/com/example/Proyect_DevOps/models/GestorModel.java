@@ -10,6 +10,7 @@ public class GestorModel {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int idGestor;
     
+    @Column(unique = true)
     private String rfc;
     private double salario;
 
