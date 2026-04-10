@@ -15,10 +15,6 @@ public class CitaModel {
     private int idCita;
 
     @ManyToOne
-    @JoinColumn(name = "IdSucursal")
-    private SucursalModel sucursalModel;
-
-    @ManyToOne
     @JoinColumn(name = "IdMascota")
     private MascotaModel mascotaModel;
 
