@@ -26,7 +26,7 @@
 
 | Capa | Tecnologías |
 |------|-------------|
-| **Backend** | Java 17+ (Spring Boot / JavaFX - según tu proyecto) |
+| **Backend** | Java 21 (Spring Boot) |
 | **Frontend** | JavaScript (ES6), HTML5, CSS3 |
 | **Seguridad** | Encriptación personalizada, generación de códigos seguros |
 | **Estilos** | CSS moderno con menús laterales dinámicos |
