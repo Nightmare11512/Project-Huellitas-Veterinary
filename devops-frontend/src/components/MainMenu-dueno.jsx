@@ -201,6 +201,7 @@ function MainMenu() {
                     )
                   )}
 
+                  //muestra la tabla de citas
                   {activeItem === "Citas" && (
                     <>
                     <p></p>
