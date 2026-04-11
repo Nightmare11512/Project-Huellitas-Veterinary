@@ -14,6 +14,7 @@ public class GestorModel {
     private String rfc;
     private double salario;
 
+    //hola..
     @OneToOne
     @JoinColumn(name = "idUsuario")
     private UsuarioModel usuario;
