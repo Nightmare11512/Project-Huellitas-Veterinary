@@ -1,78 +1,120 @@
 html body {
   margin: 0;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  overflow: hidden; /* para evitar scroll si las sidebars se salen */
+  overflow: hidden;
 }
 
 .main-menu {
-  display: flex; /* contenedor horizontal */
-  height: 100vh; /* ocupa toda la altura */
-  gap: 10px; /* separación entre sidebars si quieres */
+  display: flex;
+  height: 100vh;
+  gap: 10px;
   background: linear-gradient(135deg, #1e355f, #7a0f2d);
   background-size: auto, 100% 100%;
   animation: fondoAnimado 12s ease infinite;
 }
 
 @keyframes fondoAnimado {
-  0% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-  100% {
-    background-position: 0% 50%;
-  }
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
 }
 
-/* Sidebar principal */
+:root {
+  --gap:         8px;
+  --sidebar-p:   clamp(10px, 1.5vw, 20px);
+  --primary-w:   clamp(160px, 20vw, 270px);
+  --secondary-w: clamp(130px, 16vw, 220px);
+}
+
+/* ── Sidebar principal ── */
 .sidebar.primary {
   flex-shrink: 0;
   position: fixed;
-  top: 20px;
-  left: -250px; /* fuera de pantalla al inicio */
-  width: 250px;
-  height: calc(100% - 40px);
+  top: var(--gap);
+  left: calc(-1 * var(--primary-w) - 40px);
+  width: var(--primary-w);
+  height: calc(100% - var(--gap));
   background-color: lightgray;
   color: black;
-  border-radius: 15px;
-  padding: 20px;
+  border-radius: 15px 15px 0 0;
+  padding: var(--sidebar-p);
+  box-sizing: border-box;
   box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-  transition: left 0.5s ease, opacity 0.5s ease;
-  opacity: 0; /* invisible al inicio */
-  z-index: 100;
-}
-
-/* Sidebar secundaria */
-.sidebar.secondary {
-  flex-shrink: 0;
-  width: 200px;
-  height: calc(100% - 40px);
-  background-color: #8f8f8f;
-  border-radius: 15px;
-  padding: 15px;
-  box-shadow: 0 3px 10px rgba(0,0,0,0.2);
-  position: fixed;
-  top: 20px;
-  left: -220px; /* fuera de pantalla */
   transition: left 0.5s ease, opacity 0.5s ease;
   opacity: 0;
   z-index: 100;
 }
 
-/* Clase activa para mostrar sidebar principal */
 .sidebar.primary.active {
-  left: 20px;
+  left: var(--gap);
   opacity: 1;
 }
 
-/* Clase activa para mostrar sidebar secundaria */
+/* ── Sidebar secundaria ── */
+.sidebar.secondary {
+  flex-shrink: 0;
+  position: fixed;
+  top: var(--gap);
+  left: calc(-1 * var(--secondary-w) - 40px);
+  width: var(--secondary-w);
+  height: calc(100% - var(--gap));
+  background-color: #8f8f8f;
+  border-radius: 15px 15px 0 0;
+  padding: var(--sidebar-p);
+  box-sizing: border-box;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+  transition: left 0.5s ease, opacity 0.5s ease;
+  opacity: 0;
+  z-index: 100;
+}
+
 .sidebar.secondary.active {
-  left: 315px; /* separada de la principal */
+  left: calc(var(--gap) + var(--primary-w) + var(--gap));
   opacity: 1;
 }
 
-/* Items internos */
+/* ── Sidebar terciaria ── */
+.sidebar.tertiary {
+  position: fixed;
+  top: var(--gap);
+  right: -110%;
+  width: calc(
+    100vw
+    - var(--gap)
+    - var(--primary-w)
+    - var(--gap)
+    - var(--secondary-w)
+    - var(--gap)
+    - var(--gap)
+  );
+  height: calc(100% - var(--gap));
+  background-color: #d3d3d3;
+  border-radius: 15px 15px 0 0;
+  padding: var(--sidebar-p);
+  box-sizing: border-box;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+  transition: right 0.5s ease, opacity 0.5s ease;
+  opacity: 0;
+}
+
+.sidebar.tertiary.active {
+  right: var(--gap);
+  opacity: 1;
+}
+
+/* ── Textos con fade-in ── */
+.sidebar.secondary p,
+.sidebar.tertiary p {
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+.sidebar.secondary.active p,
+.sidebar.tertiary.active p {
+  opacity: 1;
+}
+
+/* ── Items internos ── */
 .sidebar.primary .menu-item,
 .sidebar.secondary .menu-item {
   display: block;
@@ -87,47 +129,28 @@ html body {
 .sidebar.primary .menu-item:hover,
 .sidebar.secondary .menu-item:hover {
   background-color: #4b5563;
-  color: white
+  color: white;
 }
 
-.sidebar.secondary p {
-  opacity: 0;
-  transition: opacity 0.5s ease;
+/* ── Móvil ── */
+@media (max-width: 600px) {
+  :root {
+    --gap:         4px;
+    --primary-w:   calc(100vw - 8px);
+    --secondary-w: calc(100vw - 8px);
+  }
+
+  .sidebar.secondary.active {
+    left: var(--gap);
+  }
+
+  .sidebar.tertiary {
+    width: calc(100vw - 8px);
+  }
 }
 
-.sidebar.secondary.active p {
-  opacity: 1;
-}
-
-  .sidebar.tertiary{
-    position: fixed;
-    top: 20px;
-    right: -110%; /* fuera de pantalla */
-    width: 755px;
-    height: calc(100% - 40px);
-    background-color: #d3d3d3;
-    border-radius: 15px;
-    padding: 20px;
-    box-shadow: 0 3px 10px rgba(0,0,0,0.2);
-    transition: right 0.5s ease, opacity 0.5s ease;
-    opacity: 0;
-  }
-
-  .sidebar.tertiary.active{
-    right: 20px; /* aparece desde la derecha */
-    opacity: 1;
-  }
-
-  .sidebar.tertiary p {
-    opacity: 0;
-    transition: opacity 0.5s ease;
-  }
-
-  .sidebar.tertiary.active p {
-    opacity: 1;
-  }
-
-.button-back{
+/* ── Botones ── */
+.button-back {
   position: absolute;
   padding: 10px 15px;
   background-color: #2c2c54;
@@ -135,15 +158,12 @@ html body {
   border: none;
   border-radius: 5px;
   cursor: pointer;
-  z-index: 110; /* por encima de las sidebars */
+  z-index: 110;
   transition: 0.3s;
 }
+.button-back:hover { background-color: #4b5563; }
 
-.button-back:hover{
-  background-color: #4b5563;
-}
-
-.btn{
+.btn {
   position: absolute;
   padding: 10px 15px;
   background-color: #2c2c54;
@@ -153,12 +173,9 @@ html body {
   cursor: pointer;
   transition: 0.3s;
 }
+.btn:hover { background-color: #4b5563; }
 
-.btn:hover{
-  background-color: #4b5563;
-}
-
-.menuSeleccionable{
+.menuSeleccionable {
   background-color: transparent;
   border: none;
   border-radius: 5px;
@@ -166,87 +183,28 @@ html body {
   padding: 5px;
   transition: 0.3s;
 }
+.menuSeleccionable:focus-visible { outline: none; }
+.menuSeleccionable:hover { background-color: darkgray; }
 
-.menuSeleccionable:focus-visible{
-  outline: none;
-}
-
-.menuSeleccionable:hover{
-  background-color: darkgray;
-}
-
-.formulario{
+.formulario {
   background-color: lightgray;
   border: none;
   border-radius: 5px;
   padding: 5px;
 }
 
-.identado{
-  margin-left: 20px;
-  font-size: 13px;
-}
+.identado    { margin-left: 20px; font-size: 13px; }
+.font-size-1 { font-size: 14px; line-height: 1.5; }
+.font-size-2 { font-size: 14px; }
 
-.font-size-1{
-  font-size: 14px;
-  line-height: 1.5;
-}
+.estado            { padding: 4px 10px; font-size: 12px; font-weight: 600; }
+.estado.completado { color: #2e7d32; background-color: #e6f4ea; border-radius: 15px; }
+.estado.pendiente  { color: #e65100; background-color: #fff3e0; border-radius: 15px; }
+.estado.cancelado  { color: #c62828; background-color: #fce4e4; border-radius: 15px; }
 
-.font-size-2{
-  font-size: 14px;
-}
+.Entrada       { border-radius: 5px; background-color: darkgray; border: none; transition: 0.3s; }
+.Entrada:hover { background-color: gray; }
+.EntradaTxt    { color: #323232; font-size: 13px; }
 
-.estado {
-  padding: 4px 10px;
-  font-size: 12px;
-  font-weight: 600;
-}
-
-.estado.completado {
-  color: #2e7d32;
-  background-color: #e6f4ea;
-  border-radius: 15px;
-}
-
-.estado.pendiente {
-  color: #e65100;
-  background-color: #fff3e0;
-  border-radius: 15px;
-}
-
-.estado.cancelado {
-  color: #c62828;
-  background-color: #fce4e4;
-  border-radius: 15px;
-}
-
-.Entrada{
-  border-radius: 5px;
-  background-color: darkgray;
-  border: none;
-  transition: 0.3s;
-}
-
-.Entrada:hover{
-  background-color: gray;
-}
-
-.EntradaTxt {
-  color: #323232;
-  font-size: 13px;
-}
-
-.buton{
-  position: relative;
-  padding: 10px 15px;
-  background-color: #2c2c54;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: 0.3s;
-}
-
-.buton:hover{
-  background-color: rgb(20, 25, 35);
-}
+.buton       { position: relative; padding: 10px 15px; background-color: #2c2c54; color: white; border: none; border-radius: 5px; cursor: pointer; transition: 0.3s; }
+.buton:hover { background-color: rgb(20, 25, 35); }
