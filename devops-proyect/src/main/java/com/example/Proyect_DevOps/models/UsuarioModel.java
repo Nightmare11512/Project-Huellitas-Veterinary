@@ -13,7 +13,7 @@ public class UsuarioModel {
     private String paterno;
     private String materno;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String correo;
     @Column(nullable = false)
     private String contraseña;

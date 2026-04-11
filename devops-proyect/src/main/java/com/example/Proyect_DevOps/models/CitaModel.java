@@ -15,10 +15,6 @@ public class CitaModel {
     private int idCita;
 
     @ManyToOne
-    @JoinColumn(name = "IdSucursal")
-    private SucursalModel sucursalModel;
-
-    @ManyToOne
     @JoinColumn(name = "IdMascota")
     private MascotaModel mascotaModel;
 
@@ -39,9 +35,8 @@ public class CitaModel {
     inverseJoinColumns = @JoinColumn(name = "IdSucursal"))
     public List<ServicioModel> servicios = new ArrayList<>();
 
-    public CitaModel(SucursalModel sucursalModel, MascotaModel mascotaModel, UsuarioModel usuarioMascota, 
+    public CitaModel(MascotaModel mascotaModel, UsuarioModel usuarioMascota, 
         UsuarioModel usuarioVeterinario, LocalDate fecha, LocalTime entradaAgendada, int estado_cita){
-        this.sucursalModel = sucursalModel;
         this.mascotaModel = mascotaModel;
         this.usuarioMascota = usuarioMascota;
         this.usuarioVeterinario = usuarioVeterinario;
@@ -60,14 +55,6 @@ public class CitaModel {
 
     public void setIdServicio(int idServicio){
         this.idCita = idServicio;
-    }
-
-    public SucursalModel getSucursalModel(){
-        return sucursalModel;
-    }
-
-    public void setSucursalModel(SucursalModel sucursalModel){
-        this.sucursalModel = sucursalModel;
     }
 
     public MascotaModel getMascotaModel(){
@@ -137,7 +124,6 @@ public class CitaModel {
     @Override
     public String toString(){
         return "idCita=" + idCita + 
-        ", idSucursal=" + sucursalModel.getIdSucursal() + 
         ", idMascota=" + mascotaModel.getIdMascota() + 
         ", idUsuarioM=" + usuarioMascota.getIdUsuario() + 
         ", idUsuarioV=" + usuarioVeterinario.getIdUsuario() +
