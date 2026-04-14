@@ -128,8 +128,8 @@ function MainMenu() {
     <div className="main-menu" style={{ display: "flex" }}>
 
       <div className={`sidebar primary ${dueno ? "active" : ""}`}>
-        <h2>Menú Principal</h2>
-        <h3>Bienvenido, {dueno ? dueno.nombre : "Dueño de Mascota"}</h3>
+        <h2 style={{color: "white"}}>Menú Principal</h2>
+        <h3 style={{color: "white"}}>Bienvenido, {dueno ? dueno.nombre : "Dueño de Mascota"}</h3>
         <nav className="nav-links">
           {menuItems.map((item) => (
             <div
@@ -146,98 +146,8 @@ function MainMenu() {
         </nav>
         <button type="button" onClick={handleLogout} className="btn">Cerrar Sesión</button>
       </div>
-
-      <div className={`sidebar secondary ${activeItem ? "active" : ""}`}>
-        {activeItem && (
-          <>
-            <h2>{activeItem}</h2>
-            {(activeItem === "Mascotas" || activeItem === "Citas") && (
-              <>
-                <p>Gestión de {activeItem}</p>
-                <form className="formulario">
-                  <div>
-                    <select
-                      className="menuSeleccionable"
-                      value={selectedMascota}
-                      onChange={(e) => {
-                        const valor = e.target.value;
-                        setSelectedMascota(valor);
-                        if (valor !== "") {
-                          setLoading(true);
-                          Swal.fire({
-                            title: "Buscando datos espere",
-                            text: "Buscando espere...",
-                            icon: "info",
-                            timerProgressBar: true,
-                            timer: 2000,
-                            showConfirmButton: false
-                          }).then(() => {
-                            setLoading(false);
-                          });
-                        } else {
-                          setLoading(false);
-                        }
-                      }}
-                    >
-                      <option value="">Seleccione su mascota</option>
-                      {mascota.map((m) => (
-                        <option key={m.idMascota} value={m.idMascota}>{m.nombre}</option>
-                      ))}
-                    </select>
-                  </div>
-
-                  {activeItem === "Mascotas" && (
-                    loading ? <p>Cargando...</p> : (
-                    <>
-                      <div className="font-size-1">Nombre: {mascotaSeleccionadaObj?.nombre}</div>
-                      <div className="font-size-1">
-                        Peso: {mascotaSeleccionadaObj?.peso ? `${mascotaSeleccionadaObj.peso} Kg` : ""}
-                      </div>
-                      <div className="font-size-1">Fecha de nacimiento:</div>
-                      <div className="font-size-2">{mascotaSeleccionadaObj?.fechaNacimiento}</div>
-                      <div className="font-size-1">Especie: {mascotaSeleccionadaObj?.raza.especie.nombre}</div>
-                      <div className="identado">Raza: {mascotaSeleccionadaObj?.raza.nombre}</div>
-                    </>
-                    )
-                  )}
-
-                  {activeItem === "Citas" && (
-                    <>
-                    <p></p>
-                    <div className="EntradaTxt">Indique una fecha para agendar</div>
-                    <input type="date" value={fecha} onChange={(e) => {setFecha(e.target.value)}} placeholder="Indique una fecha" className="Entrada"/>
-                    <p></p>
-                    <div className="EntradaTxt">Indique una hora para agendar</div>
-                    <input type="time" value={hora} onChange={(e) => {sethora(e.target.value)}} placeholder="Indique su hora de llegada" className="Entrada"/>
-                    <p></p>
-                    <button type="button" className="buton" onClick={() => {}}>Crear cita</button>
-                    </>
-                  )}
-                </form>
-              </>
-            )}
-            <p>
-              <button type="button" className="button-back" onClick={() => { setActiveItem(null); 
-                                                               setSelectedMascota("");
-                                                               setFecha("");
-                                                               sethora("");}}>
-                Volver
-              </button>
-            </p>
-          </>
-        )}
+      <div className={`sidebar secondary ${activeItem}`}>
       </div>
-
-      <div className={`sidebar tertiary ${activeItem === "Citas" || activeItem === "Tratamientos" ? "active" : ""}`}>
-        <h2>Historial de {activeItem}</h2>
-        {activeItem === "Citas" && (
-          loading ? <p>Cargando...</p> : (
-          <TablaCitas citas={citas} />
-          )
-        )}
-      </div>
-
-      <div className="main-content"></div>
     </div>
   );
 }
