@@ -14,6 +14,7 @@ import com.example.Proyect_DevOps.models.CitaModel;
 import com.example.Proyect_DevOps.models.MascotaModel;
 import com.example.Proyect_DevOps.services.CitaService;
 
+
 @RestController
 @RequestMapping("/cita")
 public class CitaController {
@@ -41,4 +42,10 @@ public class CitaController {
             return ResponseEntity.notFound().build();
         }
     }
+
+    @GetMapping("/usuario/{correo}")
+    public long contarCitasPorUsuario(@PathVariable String correo) {
+        return citaService.countByUsuarioCitas(correo);
+    }
+    
 }

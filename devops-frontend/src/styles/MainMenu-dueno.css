@@ -34,7 +34,7 @@ html body {
   left: calc(-1 * var(--primary-w) - 40px);
   width: var(--primary-w);
   height: calc(100% - var(--gap));
-  background-color: lightgray;
+  background-color: rgb(27, 27, 27);
   color: black;
   border-radius: 15px 15px 0 0;
   padding: var(--sidebar-p);
@@ -55,79 +55,51 @@ html body {
   flex-shrink: 0;
   position: fixed;
   top: var(--gap);
-  left: calc(-1 * var(--secondary-w) - 40px);
-  width: var(--secondary-w);
+  left: calc(var(--primary-w) + var(--gap) * 2);
+  width: calc(100% - var(--primary-w) - var(--gap) * 3);
   height: calc(100% - var(--gap));
-  background-color: #8f8f8f;
+  background-color: #ffffff;
   border-radius: 15px 15px 0 0;
   padding: var(--sidebar-p);
   box-sizing: border-box;
   box-shadow: 0 3px 10px rgba(0,0,0,0.2);
-  transition: left 0.5s ease, opacity 0.5s ease;
-  opacity: 0;
+  animation: slideFromRight 0.5s ease forwards;
   z-index: 100;
 }
 
-.sidebar.secondary.active {
-  left: calc(var(--gap) + var(--primary-w) + var(--gap));
-  opacity: 1;
-}
-
-/* ── Sidebar terciaria ── */
-.sidebar.tertiary {
-  position: fixed;
-  top: var(--gap);
-  right: -110%;
-  width: calc(
-    100vw
-    - var(--gap)
-    - var(--primary-w)
-    - var(--gap)
-    - var(--secondary-w)
-    - var(--gap)
-    - var(--gap)
-  );
-  height: calc(100% - var(--gap));
-  background-color: #d3d3d3;
-  border-radius: 15px 15px 0 0;
-  padding: var(--sidebar-p);
-  box-sizing: border-box;
-  box-shadow: 0 3px 10px rgba(0,0,0,0.2);
-  transition: right 0.5s ease, opacity 0.5s ease;
-  opacity: 0;
-}
-
-.sidebar.tertiary.active {
-  right: var(--gap);
-  opacity: 1;
+@keyframes slideFromRight {
+  from {
+    left: 100%;
+    opacity: 0;
+  }
+  to {
+    left: calc(var(--primary-w) + var(--gap) * 2);
+    opacity: 1;
+  }
 }
 
 /* ── Textos con fade-in ── */
-.sidebar.secondary p,
-.sidebar.tertiary p {
+.sidebar.secondary p {
   opacity: 0;
   transition: opacity 0.5s ease;
 }
 
-.sidebar.secondary.active p,
-.sidebar.tertiary.active p {
-  opacity: 1;
-}
 
 /* ── Items internos ── */
 .sidebar.primary .menu-item,
-.sidebar.secondary .menu-item {
+.menu-item {
   display: block;
   margin-bottom: 15px;
   padding: 10px;
   border-radius: 10px;
-  color: black;
+  font-weight: bold;
+  color: rgb(255, 255, 255);
   text-decoration: none;
   transition: background-color 0.3s;
 }
 
 .sidebar.primary .menu-item:hover,
-.sidebar.secondary .menu-item:hover {
+.menu-item:hover {
   background-color: #4b5563;
   color: white;
 }
@@ -208,3 +180,77 @@ html body {
 
 .buton       { position: relative; padding: 10px 15px; background-color: #2c2c54; color: white; border: none; border-radius: 5px; cursor: pointer; transition: 0.3s; }
 .buton:hover { background-color: rgb(20, 25, 35); }
+
+
+.slydes-wrapper {
+  display: flex;
+  gap: 15px;
+  margin-top: 10px;
+}
+
+.slydes {
+  display: flex;
+  flex: 1;
+  background-color: lightgray;
+  border-radius: 8px;
+  padding: 20px;
+  flex-direction: row;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.15);
+  align-items: center;
+
+  animation: slideInRight 0.35s ease;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.slydes:hover{
+  transform: translateY(-8px);
+  box-shadow: 0 10px 20px rgba(0,0,0,0.25);
+}
+
+.slide-out{
+  animation: slideOutRight 0.25s ease forwards;
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(60px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideOutRight {
+  from {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(60px);
+  }
+}
+
+.icon {
+  font-size: 30px;
+  width: 70px;
+  height: 70px;
+  background-color: #2c2c54;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+}
+
+.card-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.subtitle {
+  font-size: 16px;
+  color: #444;
+}

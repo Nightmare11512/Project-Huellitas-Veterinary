@@ -50,17 +50,16 @@ const TablaCitas = ({ citas }) => {
 function MainMenu() {
   const navigate = useNavigate();
   const [dueno, setDueno] = useState(null);
-  const [activeItem, setActiveItem] = useState(null);
+  const [activeItem, setActiveItem] = useState("");
   const [mascota, setMascota] = useState([]);
   const [selectedMascota, setSelectedMascota] = useState("");
   const [citas, setCitas] = useState([]);
-  // eslint-disable-next-line no-unused-vars
-  const [refresh, setRefresh] = useState(false);
   const correo = sessionStorage.getItem("Usuario")?.replace(/^"|"$/g, "");
-  const [loading, setLoading] = useState(false);
   const menuItems = ["Mascotas", "Citas", "Tratamientos"];
-  const [fecha, setFecha] = useState("");
-  const [hora, sethora] = useState("");
+  const [noMascotas, setNoMascota] = useState(0);
+  const [noCitas, setNoCita] = useState(0);
+  const [isLeaving, setIsLeaving] = useState(false);
+  const [nextMenu, setNextMenu] = useState("");
 
   const mascotaSeleccionadaObj = mascota.find((m) => m.idMascota === Number(selectedMascota));
 
@@ -95,50 +94,41 @@ function MainMenu() {
 
   useEffect(() => {
     if (!correo) return;
-    fetch(`http://dev-server.local:8080/mascota/usuario/${correo}`)
-      .then((res) => res.json())
-      .then((data) => setMascota(data))
-      .catch((err) => console.error(err));
-  }, [correo]);
+      fetch(`http://dev-server.local:8080/mascota/usuario/${correo}`)
+      .then(res => res.json())
+      .then(data => setNoMascota(data));
+  }), [correo];
 
   useEffect(() => {
-    if (!correo || !mascotaSeleccionadaObj) return;
-  
-    const fetchCitas = fetch(`http://dev-server.local:8080/cita/${correo}/${mascotaSeleccionadaObj.idMascota}`)
-      .then((res) => {
-        if (!res.ok) throw new Error("Error al obtener citas");
-        return res.json();
-      });
-  
-    const swalTimer = new Promise((resolve) => setTimeout(resolve, 2000));
-  
-    Promise.all([fetchCitas, swalTimer])
-      .then(([data]) => {
-        setCitas(Array.isArray(data) ? data : []);
-        setLoading(false);
-      })
-      .catch((err) => {
-        console.error(err);
-        setCitas([]);
-        setLoading(false);
-      });
-  }, [selectedMascota, refresh, correo, mascotaSeleccionadaObj]);
+    if (!correo) return;
+      fetch(`http://dev-server.local:8080/cita/usuario/${correo}`)
+      .then(res => res.json())
+      .then(data => setNoCita(data));
+  }), [correo]
+
+  const changeMenu = (item) => {
+  if (item === activeItem) return;
+
+  setIsLeaving(true);
+
+  setTimeout(() => {
+    setActiveItem(item);
+    setIsLeaving(false);
+  }, 250);
+};
 
   return (
     <div className="main-menu" style={{ display: "flex" }}>
 
       <div className={`sidebar primary ${dueno ? "active" : ""}`}>
-        <h2>Menú Principal</h2>
-        <h3>Bienvenido, {dueno ? dueno.nombre : "Dueño de Mascota"}</h3>
+        <h2 style={{color: "white"}}>Menú Principal</h2>
+        <h3 style={{color: "white"}}>Bienvenido, {dueno ? dueno.nombre : "Dueño de Mascota"}</h3>
         <nav className="nav-links">
           {menuItems.map((item) => (
             <div
               key={item}
               className={`menu-item ${activeItem === item ? "active" : ""}`}
-              onClick={() => {setActiveItem(item); 
-                              setSelectedMascota("");
-                              setFecha("");
-                              sethora("");}}
+              onClick={() => {changeMenu(item)}}
               style={{ cursor: "pointer", margin: "5px 0" }}>
               {item}
             </div>
@@ -146,98 +136,75 @@ function MainMenu() {
         </nav>
         <button type="button" onClick={handleLogout} className="btn">Cerrar Sesión</button>
       </div>
+      <div className={`sidebar secondary ${activeItem}`}>
 
-      <div className={`sidebar secondary ${activeItem ? "active" : ""}`}>
-        {activeItem && (
+      {activeItem === "" && (
+        <>
+          <h2 style={{fontWeight: "bold", color: "black"}}>Datos Generales</h2>
+
+          <div className="slydes-wrapper">
+            <div className={`slydes ${isLeaving ? "slide-out" : ""}`}>
+              <span className="icon">🐕</span>
+
+              <div className="card-text">
+                <span style={{fontWeight: "bold", fontSize: "30px"}}>Mascotas</span>
+                <span className="subtitle">
+                  Usted tiene {noMascotas} {noMascotas === 1 ? "Mascota" : "Mascotas"}
+                </span>
+              </div>
+            </div>
+
+            <div className={`slydes ${isLeaving ? "slide-out" : ""}`}>
+              <span className="icon">🗓️</span>
+
+              <div className="card-text">
+                <span style={{fontWeight: "bold", fontSize: "30px"}}>Citas</span>
+                <span className="subtitle">
+                  Usted tiene {noCitas} {noCitas === 1 ? "Cita" : "Citas"} pendientes
+                </span>
+              </div>
+            </div>
+
+            <div className={`slydes ${isLeaving ? "slide-out" : ""}`}>
+              <span className="icon">💉</span>
+
+              <div className="card-text">
+                <span style={{fontWeight: "bold", fontSize: "30px"}}>Tratamientos</span>
+                <span className="subtitle">
+                  Usted tiene {noCitas} {noCitas === 1 ? "Tratamiento" : "Tratamientos"}
+                </span>
+              </div>
+            </div>
+          </div>
+        </>
+      )}
+      
+          
+        {activeItem === "Mascotas" && (
           <>
-            <h2>{activeItem}</h2>
-            {(activeItem === "Mascotas" || activeItem === "Citas") && (
-              <>
-                <p>Gestión de {activeItem}</p>
-                <form className="formulario">
-                  <div>
-                    <select
-                      className="menuSeleccionable"
-                      value={selectedMascota}
-                      onChange={(e) => {
-                        const valor = e.target.value;
-                        setSelectedMascota(valor);
-                        if (valor !== "") {
-                          setLoading(true);
-                          Swal.fire({
-                            title: "Buscando datos espere",
-                            text: "Buscando espere...",
-                            icon: "info",
-                            timerProgressBar: true,
-                            timer: 2000,
-                            showConfirmButton: false
-                          }).then(() => {
-                            setLoading(false);
-                          });
-                        } else {
-                          setLoading(false);
-                        }
-                      }}
-                    >
-                      <option value="">Seleccione su mascota</option>
-                      {mascota.map((m) => (
-                        <option key={m.idMascota} value={m.idMascota}>{m.nombre}</option>
-                      ))}
-                    </select>
-                  </div>
+            <h2 style={{fontWeight: "bold", color: "black"}}>Datos de Mascotas</h2>
+          </>
+        )}
 
-                  {activeItem === "Mascotas" && (
-                    loading ? <p>Cargando...</p> : (
-                    <>
-                      <div className="font-size-1">Nombre: {mascotaSeleccionadaObj?.nombre}</div>
-                      <div className="font-size-1">
-                        Peso: {mascotaSeleccionadaObj?.peso ? `${mascotaSeleccionadaObj.peso} Kg` : ""}
-                      </div>
-                      <div className="font-size-1">Fecha de nacimiento:</div>
-                      <div className="font-size-2">{mascotaSeleccionadaObj?.fechaNacimiento}</div>
-                      <div className="font-size-1">Especie: {mascotaSeleccionadaObj?.raza.especie.nombre}</div>
-                      <div className="identado">Raza: {mascotaSeleccionadaObj?.raza.nombre}</div>
-                    </>
-                    )
-                  )}
+        {activeItem === "Citas" && (
+          <>
+            <h2 style={{fontWeight: "bold", color: "black"}}>Datos de Citas</h2>
+            <TablaCitas></TablaCitas>
+          </>
+        )}
 
-                  {activeItem === "Citas" && (
-                    <>
-                    <p></p>
-                    <div className="EntradaTxt">Indique una fecha para agendar</div>
-                    <input type="date" value={fecha} onChange={(e) => {setFecha(e.target.value)}} placeholder="Indique una fecha" className="Entrada"/>
-                    <p></p>
-                    <div className="EntradaTxt">Indique una hora para agendar</div>
-                    <input type="time" value={hora} onChange={(e) => {sethora(e.target.value)}} placeholder="Indique su hora de llegada" className="Entrada"/>
-                    <p></p>
-                    <button type="button" className="buton" onClick={() => {}}>Crear cita</button>
-                    </>
-                  )}
-                </form>
-              </>
-            )}
-            <p>
-              <button type="button" className="button-back" onClick={() => { setActiveItem(null); 
-                                                               setSelectedMascota("");
-                                                               setFecha("");
-                                                               sethora("");}}>
-                Volver
-              </button>
-            </p>
+        {activeItem === "Tratamientos" && (
+          <>
+           <h2 style={{fontWeight: "bold", color: "black"}}>Datos de Tratamientos</h2>
+          </>
+        )}
+
+        {activeItem !== "" && (
+          <>
+            <button className="buton" onClick={() => {changeMenu("")}}>Volver</button>
           </>
         )}
       </div>
-
-      <div className={`sidebar tertiary ${activeItem === "Citas" || activeItem === "Tratamientos" ? "active" : ""}`}>
-        <h2>Historial de {activeItem}</h2>
-        {activeItem === "Citas" && (
-          loading ? <p>Cargando...</p> : (
-          <TablaCitas citas={citas} />
-          )
-        )}
-      </div>
-
-      <div className="main-content"></div>
     </div>
   );
 }

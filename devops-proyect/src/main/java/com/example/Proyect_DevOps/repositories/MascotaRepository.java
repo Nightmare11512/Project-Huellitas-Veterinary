@@ -11,5 +11,6 @@ import java.util.List;
 public interface MascotaRepository extends JpaRepository<MascotaModel, Integer>{
 
     List<MascotaModel> findByUsuario(UsuarioModel usuario);
+    long countByUsuario(UsuarioModel usuario);
 
 }
