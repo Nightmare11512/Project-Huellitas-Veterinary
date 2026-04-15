@@ -28,7 +28,7 @@ public class CitaModel {
     private LocalDate fecha;
     private LocalTime entradaAgendada;
     private LocalTime horaSalida;
-    private int estado_cita;
+    private int estadoCita;
 
     @ManyToMany
     @JoinTable(name= "Cita-Servicio", joinColumns = @JoinColumn(name = "IdCita"),
@@ -36,14 +36,14 @@ public class CitaModel {
     public List<ServicioModel> servicios = new ArrayList<>();
 
     public CitaModel(MascotaModel mascotaModel, UsuarioModel usuarioMascota, 
-        UsuarioModel usuarioVeterinario, LocalDate fecha, LocalTime entradaAgendada, int estado_cita){
+        UsuarioModel usuarioVeterinario, LocalDate fecha, LocalTime entradaAgendada, int estadoCita){
         this.mascotaModel = mascotaModel;
         this.usuarioMascota = usuarioMascota;
         this.usuarioVeterinario = usuarioVeterinario;
         this.fecha = fecha;
         this.entradaAgendada = entradaAgendada;
         this.horaSalida = null;
-        this.estado_cita = estado_cita;
+        this.estadoCita = estadoCita;
     }
 
     public CitaModel(){
@@ -106,11 +106,11 @@ public class CitaModel {
     }
 
     public int getEstadoCita(){
-        return estado_cita;
+        return estadoCita;
     }
 
     public void setEstadoCita(int estado_cita){
-        this.estado_cita = estado_cita;
+        this.estadoCita = estado_cita;
     }
 
     public List<ServicioModel> getListaServicios(){
@@ -128,6 +128,6 @@ public class CitaModel {
         ", idUsuarioM=" + usuarioMascota.getIdUsuario() + 
         ", idUsuarioV=" + usuarioVeterinario.getIdUsuario() +
         ", fecha=" + fecha.toString() + 
-        ", estado_cita=" + estado_cita;
+        ", estado_cita=" + estadoCita;
     }
 }

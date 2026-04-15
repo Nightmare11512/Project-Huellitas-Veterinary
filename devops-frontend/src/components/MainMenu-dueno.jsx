@@ -54,13 +54,12 @@ function MainMenu() {
   const [mascota, setMascota] = useState([]);
   const [selectedMascota, setSelectedMascota] = useState("");
   const [citas, setCitas] = useState([]);
-  // eslint-disable-next-line no-unused-vars
-  const [refresh, setRefresh] = useState(false);
   const correo = sessionStorage.getItem("Usuario")?.replace(/^"|"$/g, "");
-  const [loading, setLoading] = useState(false);
   const menuItems = ["Mascotas", "Citas", "Tratamientos"];
-  const [fecha, setFecha] = useState("");
-  const [hora, sethora] = useState("");
+  const [noMascotas, setNoMascota] = useState(0);
+  const [noCitas, setNoCita] = useState(0);
+  const [isLeaving, setIsLeaving] = useState(false);
+  const [nextMenu, setNextMenu] = useState("");
 
   const mascotaSeleccionadaObj = mascota.find((m) => m.idMascota === Number(selectedMascota));
 
@@ -95,34 +94,28 @@ function MainMenu() {
 
   useEffect(() => {
     if (!correo) return;
-    fetch(`http://dev-server.local:8080/mascota/usuario/${correo}`)
-      .then((res) => res.json())
-      .then((data) => setMascota(data))
-      .catch((err) => console.error(err));
-  }, [correo]);
+      fetch(`http://dev-server.local:8080/mascota/usuario/${correo}`)
+      .then(res => res.json())
+      .then(data => setNoMascota(data));
+  }), [correo];
 
   useEffect(() => {
-    if (!correo || !mascotaSeleccionadaObj) return;
-  
-    const fetchCitas = fetch(`http://dev-server.local:8080/cita/${correo}/${mascotaSeleccionadaObj.idMascota}`)
-      .then((res) => {
-        if (!res.ok) throw new Error("Error al obtener citas");
-        return res.json();
-      });
-  
-    const swalTimer = new Promise((resolve) => setTimeout(resolve, 2000));
-  
-    Promise.all([fetchCitas, swalTimer])
-      .then(([data]) => {
-        setCitas(Array.isArray(data) ? data : []);
-        setLoading(false);
-      })
-      .catch((err) => {
-        console.error(err);
-        setCitas([]);
-        setLoading(false);
-      });
-  }, [selectedMascota, refresh, correo, mascotaSeleccionadaObj]);
+    if (!correo) return;
+      fetch(`http://dev-server.local:8080/cita/usuario/${correo}`)
+      .then(res => res.json())
+      .then(data => setNoCita(data));
+  }), [correo]
+
+  const changeMenu = (item) => {
+  if (item === activeItem) return;
+
+  setIsLeaving(true);
+
+  setTimeout(() => {
+    setActiveItem(item);
+    setIsLeaving(false);
+  }, 250);
+};
 
   return (
     <div className="main-menu" style={{ display: "flex" }}>
@@ -135,10 +128,7 @@ function MainMenu() {
             <div
               key={item}
               className={`menu-item ${activeItem === item ? "active" : ""}`}
-              onClick={() => {setActiveItem(item); 
-                              setSelectedMascota("");
-                              setFecha("");
-                              sethora("");}}
+              onClick={() => {changeMenu(item)}}
               style={{ cursor: "pointer", margin: "5px 0" }}>
               {item}
             </div>
@@ -148,30 +138,47 @@ function MainMenu() {
       </div>
       <div className={`sidebar secondary ${activeItem}`}>
 
-        {activeItem === "" && (
-          <>
-            <h2 style={{fontWeight: "bold", color: "black"}}>Datos Generales</h2>
+      {activeItem === "" && (
+        <>
+          <h2 style={{fontWeight: "bold", color: "black"}}>Datos Generales</h2>
 
-            <div className="slydes-container">
-              <div className="slydes">
-                <span className="icon">🐕</span>
+          <div className="slydes-wrapper">
+            <div className={`slydes ${isLeaving ? "slide-out" : ""}`}>
+              <span className="icon">🐕</span>
 
-                <div className="card-text">
-                  <span style={{fontWeight: "bold", fontSize: "30px"}}>Mascotas</span>
-                  <span className="subtitle">Usted tiene</span>
-                </div>
-              </div>
-
-              <div className="slydes">
-
-              </div>
-
-              <div className="slydes">
-
+              <div className="card-text">
+                <span style={{fontWeight: "bold", fontSize: "30px"}}>Mascotas</span>
+                <span className="subtitle">
+                  Usted tiene {noMascotas} {noMascotas === 1 ? "Mascota" : "Mascotas"}
+                </span>
               </div>
             </div>
-          </>
-        )}
+
+            <div className={`slydes ${isLeaving ? "slide-out" : ""}`}>
+              <span className="icon">🗓️</span>
+
+              <div className="card-text">
+                <span style={{fontWeight: "bold", fontSize: "30px"}}>Citas</span>
+                <span className="subtitle">
+                  Usted tiene {noCitas} {noCitas === 1 ? "Cita" : "Citas"} pendientes
+                </span>
+              </div>
+            </div>
+
+            <div className={`slydes ${isLeaving ? "slide-out" : ""}`}>
+              <span className="icon">💉</span>
+
+              <div className="card-text">
+                <span style={{fontWeight: "bold", fontSize: "30px"}}>Tratamientos</span>
+                <span className="subtitle">
+                  Usted tiene {noCitas} {noCitas === 1 ? "Tratamiento" : "Tratamientos"}
+                </span>
+              </div>
+            </div>
+          </div>
+        </>
+      )}
+      
           
         {activeItem === "Mascotas" && (
           <>
@@ -182,6 +189,7 @@ function MainMenu() {
         {activeItem === "Citas" && (
           <>
             <h2 style={{fontWeight: "bold", color: "black"}}>Datos de Citas</h2>
+            <TablaCitas></TablaCitas>
           </>
         )}
 
@@ -193,7 +201,7 @@ function MainMenu() {
 
         {activeItem !== "" && (
           <>
-            <button className="buton" onClick={() => {setActiveItem(""); setSelectedMascota(""); setFecha(""); sethora("")}}>Volver</button>
+            <button className="buton" onClick={() => {changeMenu("")}}>Volver</button>
           </>
         )}
       </div>
