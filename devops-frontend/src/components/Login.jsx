@@ -74,7 +74,15 @@ function Login() {
         Swal.fire({
           title: "Login correcto",
           text: "Bienvenido, has iniciado sesión correctamente",
-          icon: "success"
+          icon: "success",
+          didOpen: () => {
+            const icon = Swal.getIcon();
+            if (icon) {
+              icon.style.animation = "none";
+              icon.offsetHeight; // fuerza reflow
+              icon.style.animation = "";
+            }
+          }
         });
         fetch(`http://dev-server.local:8080/usuario/getRol?correo=${user}`)
         .then(res => res.json())
@@ -107,40 +115,42 @@ function Login() {
   };
 
   return (
-    <div className="login-container">
-      <form className="login-box" onSubmit={handleSubmit}>
-        <img src="/Logo.svg" alt="Logo" className="logo" />
-        <h2>Iniciar sesión</h2>
+    <div id="app-wrapper">
+      <div className="login-container">
+        <form className="login-box" onSubmit={handleSubmit}>
+          <img src="/Logo.svg" alt="Logo" className="logo" />
+          <h2>Iniciar sesión</h2>
 
-        <input
-          type="text"
-          placeholder="Ingrese su correo"
-          value={user}
-          onChange={(e) => setUser(e.target.value)}
-          required
-        />
-
-        <input
-          type={mostrar ? "text" : "password"}
-          placeholder="Contraseña"
-          value={contraseña}
-          onChange={(e) => setContraseña(e.target.value)}
-          required
-        />
-
-        <label className="custom-checkbox">
           <input
-            className="checkbox"
-            type="checkbox"
-            checked={mostrar}
-            onChange={() => setMostrar(!mostrar)}
+            type="text"
+            placeholder="Ingrese su correo"
+            value={user}
+            onChange={(e) => setUser(e.target.value)}
+            required
           />
-          <span className="checkmark"></span>
-          <span className="label-text">Mostrar contraseña</span>
-        </label>
 
-        <button type="submit">Entrar</button>
-      </form>
+          <input
+            type={mostrar ? "text" : "password"}
+            placeholder="Contraseña"
+            value={contraseña}
+            onChange={(e) => setContraseña(e.target.value)}
+            required
+          />
+
+          <label className="custom-checkbox">
+            <input
+              className="checkbox"
+              type="checkbox"
+              checked={mostrar}
+              onChange={() => setMostrar(!mostrar)}
+            />
+            <span className="checkmark"></span>
+            <span className="label-text">Mostrar contraseña</span>
+          </label>
+
+          <button type="submit">Entrar</button>
+        </form>
+      </div>
     </div>
   );
 }

@@ -50,7 +50,7 @@ const TablaCitas = ({ citas }) => {
 function MainMenu() {
   const navigate = useNavigate();
   const [dueno, setDueno] = useState(null);
-  const [activeItem, setActiveItem] = useState(null);
+  const [activeItem, setActiveItem] = useState("");
   const [mascota, setMascota] = useState([]);
   const [selectedMascota, setSelectedMascota] = useState("");
   const [citas, setCitas] = useState([]);
@@ -147,6 +147,55 @@ function MainMenu() {
         <button type="button" onClick={handleLogout} className="btn">Cerrar Sesión</button>
       </div>
       <div className={`sidebar secondary ${activeItem}`}>
+
+        {activeItem === "" && (
+          <>
+            <h2 style={{fontWeight: "bold", color: "black"}}>Datos Generales</h2>
+
+            <div className="slydes-container">
+              <div className="slydes">
+                <span className="icon">🐕</span>
+
+                <div className="card-text">
+                  <span style={{fontWeight: "bold", fontSize: "30px"}}>Mascotas</span>
+                  <span className="subtitle">Usted tiene</span>
+                </div>
+              </div>
+
+              <div className="slydes">
+
+              </div>
+
+              <div className="slydes">
+
+              </div>
+            </div>
+          </>
+        )}
+          
+        {activeItem === "Mascotas" && (
+          <>
+            <h2 style={{fontWeight: "bold", color: "black"}}>Datos de Mascotas</h2>
+          </>
+        )}
+
+        {activeItem === "Citas" && (
+          <>
+            <h2 style={{fontWeight: "bold", color: "black"}}>Datos de Citas</h2>
+          </>
+        )}
+
+        {activeItem === "Tratamientos" && (
+          <>
+           <h2 style={{fontWeight: "bold", color: "black"}}>Datos de Tratamientos</h2>
+          </>
+        )}
+
+        {activeItem !== "" && (
+          <>
+            <button className="buton" onClick={() => {setActiveItem(""); setSelectedMascota(""); setFecha(""); sethora("")}}>Volver</button>
+          </>
+        )}
       </div>
     </div>
   );
