@@ -1,4 +1,5 @@
 import { useNavigate } from "react-router-dom";
+import { Select, MenuItem } from "@mui/material";
 import { useEffect, useState } from "react";
 import Swal from "sweetalert2";
 import "sweetalert2/dist/sweetalert2.min.css";
@@ -51,17 +52,15 @@ function MainMenu() {
   const navigate = useNavigate();
   const [dueno, setDueno] = useState(null);
   const [activeItem, setActiveItem] = useState("");
-  const [mascota, setMascota] = useState([]);
+  const [mascotas, setMascotas] = useState([]);
   const [selectedMascota, setSelectedMascota] = useState("");
-  const [citas, setCitas] = useState([]);
+  const [ListaCitas, setCitas] = useState([]);
   const correo = sessionStorage.getItem("Usuario")?.replace(/^"|"$/g, "");
   const menuItems = ["Mascotas", "Citas", "Tratamientos"];
   const [noMascotas, setNoMascota] = useState(0);
   const [noCitas, setNoCita] = useState(0);
   const [isLeaving, setIsLeaving] = useState(false);
-  const [nextMenu, setNextMenu] = useState("");
-
-  const mascotaSeleccionadaObj = mascota.find((m) => m.idMascota === Number(selectedMascota));
+  const mascotaSeleccionadaObj = mascotas.find((m) => m.idMascota === Number(selectedMascota));
 
   const handleLogout = () => {
     Swal.fire({
@@ -96,26 +95,51 @@ function MainMenu() {
     if (!correo) return;
       fetch(`http://dev-server.local:8080/mascota/usuario/${correo}`)
       .then(res => res.json())
-      .then(data => setNoMascota(data));
-  }), [correo];
+      .then(data => setNoMascota(data))
+      .catch(err => console.error(err));
+  }, [correo]);
 
   useEffect(() => {
     if (!correo) return;
       fetch(`http://dev-server.local:8080/cita/usuario/${correo}`)
       .then(res => res.json())
-      .then(data => setNoCita(data));
-  }), [correo]
+      .then(data => setNoCita(data))
+      .catch(err => console.error(err));
+  }, [correo]);
 
   const changeMenu = (item) => {
-  if (item === activeItem) return;
+    if (item === activeItem) return;
 
-  setIsLeaving(true);
+    setIsLeaving(true);
 
-  setTimeout(() => {
-    setActiveItem(item);
-    setIsLeaving(false);
-  }, 250);
-};
+    setTimeout(() => {
+      setActiveItem(item);
+      setIsLeaving(false);
+    }, 250);
+  };
+
+  useEffect(() => {
+    if (!correo) return;
+    if (mascotaSeleccionadaObj) {
+      fetch(`http://dev-server.local:8080/cita/${correo}/${mascotaSeleccionadaObj.idMascota}`)
+      .then(res => res.json())
+      .then(data => setCitas(data))
+      .catch(err => console.error(err));
+    } else {
+      fetch(`http://dev-server.local:8080/cita/${correo}`)
+      .then(res => res.json())
+      .then(data => setCitas(data))
+      .catch(err => console.error(err));
+    }
+  }, [correo, mascotaSeleccionadaObj]);
+
+  useEffect(() => {
+    if (!correo) return;
+    fetch(`http://dev-server.local:8080/mascota/${correo}`)
+    .then(res => res.json())
+    .then(data => setMascotas(data))
+    .catch((err => console.error(err)));
+  }, [correo])
 
   return (
     <div className="main-menu" style={{ display: "flex" }}>
@@ -189,7 +213,20 @@ function MainMenu() {
         {activeItem === "Citas" && (
           <>
             <h2 style={{fontWeight: "bold", color: "black"}}>Datos de Citas</h2>
-            <TablaCitas></TablaCitas>
+            <Select
+              value={selectedMascota}
+              displayEmpty
+              onChange={(e) => setSelectedMascota(e.target.value)}
+            >
+              <MenuItem value="" key={0}><em>Todas</em></MenuItem>
+
+              {mascotas.map((m) => (
+                <MenuItem key={m.idMascota} value={m.idMascota}>
+                  {m.nombre}
+                </MenuItem>
+              ))}
+            </Select>
+            <TablaCitas citas={ListaCitas}></TablaCitas>
           </>
         )}
 

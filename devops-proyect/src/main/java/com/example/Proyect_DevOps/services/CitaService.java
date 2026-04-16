@@ -2,13 +2,10 @@ package com.example.Proyect_DevOps.services;
 
 import java.util.List;
 import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
-
 import com.example.Proyect_DevOps.models.CitaModel;
 import com.example.Proyect_DevOps.models.MascotaModel;
 import com.example.Proyect_DevOps.models.UsuarioModel;
@@ -33,6 +30,16 @@ public class CitaService {
         if (usuarioOpt.isPresent()) {
             UsuarioModel usuario = usuarioOpt.get();
             return citaRepository.countByUsuarioMascotaAndEstadoCita(usuario, 2);
+        } else {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuario no encontrado");
+        }
+    }
+
+    public List<CitaModel> getCitasByUser (String correo) {
+        Optional<UsuarioModel> usuarioOpt = usuarioRepository.findByCorreo(correo);
+        if (usuarioOpt.isPresent()) {
+            UsuarioModel usuario = usuarioOpt.get();
+            return citaRepository.findByUsuarioMascota(usuario);
         } else {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuario no encontrado");
         }

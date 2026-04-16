@@ -15,6 +15,7 @@ import com.example.Proyect_DevOps.models.MascotaModel;
 import com.example.Proyect_DevOps.services.CitaService;
 
 
+
 @RestController
 @RequestMapping("/cita")
 public class CitaController {
@@ -27,7 +28,7 @@ public class CitaController {
     @Autowired
     private MascotaRepository mascotaRepository;
 
-    @GetMapping("/cita/{correo}/{idMascota}")
+    @GetMapping("/{correo}/{idMascota}")
     public ResponseEntity<List<CitaModel>> getListaDeCitasSegunUsuarioYMascota(
             @PathVariable String correo, 
             @PathVariable int idMascota){
@@ -47,5 +48,11 @@ public class CitaController {
     public long contarCitasPorUsuario(@PathVariable String correo) {
         return citaService.countByUsuarioCitas(correo);
     }
+
+    @GetMapping("/{correo}")
+    public List<CitaModel> conseguirListaDeCitas(@PathVariable String correo) {
+        return citaService.getCitasByUser(correo);
+    }
+    
     
 }
