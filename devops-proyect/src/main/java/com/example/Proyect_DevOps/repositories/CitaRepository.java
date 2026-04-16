@@ -14,4 +14,5 @@ public interface CitaRepository extends JpaRepository<CitaModel, Integer>{
 
     List<CitaModel> findByUsuarioMascotaAndMascotaModel (UsuarioModel usuarioMascota, MascotaModel mascotaModel);
     long countByUsuarioMascotaAndEstadoCita (UsuarioModel usuario, int estadoCita);
+    List<CitaModel> findByUsuarioMascota (UsuarioModel usuario);
 }
