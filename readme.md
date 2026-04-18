@@ -46,9 +46,17 @@
 # 1. Clonar el repositorio
 git clone https://github.com/Nightmare11512/Project-Huellitas-Veterinary.git
 
-# 2. Entrar al directorio
-cd Project-Huellitas-Veterinary
+# 2. Entrar al directorio de Java con Spring
+cd Project-Huellitas-Veterinary/devops-proyect
 
-
-# Si es Spring Boot:
+#3. Correr maven con Spring Boot
 ./mvnw spring-boot:run
+
+#4. Entrar al directorio donde esta el frontend
+cd ..
+cd Project-Huellitas-Veterinary/devops-frontend
+
+#5. Correr el frontend  (en caso de correrlo para que la red local pueda acceder)
+npm run dev --  --host 
+# o en caso de solo acceder con el localhost
+npm run dev
