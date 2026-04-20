@@ -28,12 +28,12 @@ const TablaCitas = ({ citas }) => {
                 <td>{cita.fecha}</td>
                 <td>
                   <span className={`estado ${
-                    cita.estadoCita === 1 ? "completado" 
-                    : cita.estadoCita === 2 ? "pendiente" 
+                    cita.estadoCita === 2 ? "completado" 
+                    : cita.estadoCita === 1 ? "pendiente" 
                     : "cancelado"
                   }`}>
-                    {cita.estadoCita === 1 ? "Completado" 
-                    : cita.estadoCita === 2 ? "Pendiente" 
+                    {cita.estadoCita === 2 ? "Completado" 
+                    : cita.estadoCita === 1 ? "Pendiente" 
                     : "Cancelado"}
                   </span>
                 </td>
