@@ -1,12 +1,15 @@
 package com.example.Proyect_DevOps.services;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import com.example.Proyect_DevOps.dtos.MascotaDTO;
 import com.example.Proyect_DevOps.models.MascotaModel;
 import com.example.Proyect_DevOps.models.UsuarioModel;
 import com.example.Proyect_DevOps.repositories.MascotaRepository;
@@ -21,11 +24,27 @@ public class MascotaService {
     @Autowired
     private UsuarioRepository user;
 
-    public List<MascotaModel> getAllMascotaByUser(String correo){
+    public MascotaDTO convertirADTO(MascotaModel mascota) {
+        MascotaDTO dto = new MascotaDTO();
+        dto.setIdMascota(mascota.getIdMascota());
+        dto.setNombre(mascota.getNombre());
+        dto.setFechaNacimiento(mascota.getFechaNacimiento());
+        dto.setPeso(mascota.getPeso());
+        dto.setStatus(mascota.getStatus());
+        dto.setRaza(mascota.getRaza());
+        return dto;
+    }
+
+    public List<MascotaDTO> getAllMascotaByUser(String correo){
         Optional<UsuarioModel> usuarioOpt = user.findByCorreo(correo);
         if (usuarioOpt.isPresent()){
             UsuarioModel usuario = usuarioOpt.get();
-            return mascotaRepository.findByUsuario(usuario);
+            List<MascotaModel> mascotasModels = mascotaRepository.findByUsuario(usuario);
+            List<MascotaDTO> mascotasDTOs = new ArrayList <>();
+            for (MascotaModel elemento : mascotasModels){
+                mascotasDTOs.add(convertirADTO(elemento));
+            } 
+            return mascotasDTOs;
         } else {
             return List.of();
         }
