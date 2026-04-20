@@ -48,7 +48,40 @@ const TablaCitas = ({ citas }) => {
   }
 };
 
-
+const TablaMascotas = ({mascotas}) => {
+  if (!mascotas || !Array.isArray(mascotas)){
+    return <p color="black">No hay mascotas registradas</p>
+  } else if (mascotas.length === 0) {
+    <p color="black">No hay citas registradas</p>
+  } else {
+    return (
+      <div className="tabla-container">
+        <table className="tabla-mascotas">
+          <thead>
+            <tr>
+              <th>Nombre</th>
+              <th>Fecha de Nacimiento</th>
+              <th>Peso</th>
+              <th>Especie</th>
+              <th>Raza</th>
+            </tr>
+          </thead>
+          <tbody>
+            {mascotas.map((mascota) => (
+              <tr key={mascota.idMascota}>
+                <td>{mascota.nombre}</td>
+                <td>{mascota.fechaNacimiento}</td>
+                <td>{mascota.peso} Kg</td>
+                <td>{mascota.raza.especie.nombre}</td>
+                <td>{mascota.raza.nombre}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    );
+  }
+};
 
 function MainMenu() {
   const navigate = useNavigate();
@@ -169,7 +202,7 @@ function MainMenu() {
             <div
               key={item}
               className={`menu-item ${activeItem === item ? "active" : ""}`}
-              onClick={() => {changeMenu(item)}}
+              onClick={() => {changeMenu(item); setSelectedMascota("")}}
               style={{ cursor: "pointer", margin: "5px 0" }}>
               {item}
             </div>
@@ -224,6 +257,7 @@ function MainMenu() {
         {activeItem === "Mascotas" && (
           <>
             <h2 style={{fontWeight: "bold", color: "black"}}>Datos de Mascotas</h2>
+            <TablaMascotas mascotas={mascotas}></TablaMascotas>
           </>
         )}
 
@@ -236,7 +270,6 @@ function MainMenu() {
               onChange={(e) => setSelectedMascota(e.target.value)}
             >
               <MenuItem value="" key={0}><em>Todas</em></MenuItem>
-
               {mascotas.map((m) => (
                 <MenuItem key={m.idMascota} value={m.idMascota}>
                   {m.nombre}
@@ -255,6 +288,7 @@ function MainMenu() {
 
         {activeItem !== "" && (
           <>
+          <p></p>
             <button className="buton" onClick={() => {changeMenu("")}}>Volver</button>
           </>
         )}

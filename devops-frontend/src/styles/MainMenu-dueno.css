@@ -10,7 +10,7 @@ html body {
   gap: 10px;
   background: linear-gradient(135deg, #1e355f, #7a0f2d, #1e355f);
   background-size: 200% 200%;
-  animation: fondoAnimado 12s ease infinite;
+  animation: fondoAnimado 20s ease infinite;
 }
 
 @keyframes fondoAnimado {
@@ -255,4 +255,180 @@ html body {
 .subtitle {
   font-size: 16px;
   color: #444;
+}
+
+.tabla-container {
+  overflow-x: auto;
+  margin-top: 15px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.tabla-mascotas {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+.tabla-mascotas thead tr {
+  background-color: #2c2c54;
+  color: white;
+}
+
+.tabla-mascotas th {
+  padding: 12px 16px;
+  text-align: left;
+  font-weight: 600;
+  text-align: center;
+  letter-spacing: 0.5px;
+}
+
+.tabla-mascotas th:first-child { border-radius: 12px 0 0 0; }
+.tabla-mascotas th:last-child  { border-radius: 0 12px 0 0; }
+
+.tabla-mascotas td {
+  padding: 11px 16px;
+  border-bottom: 1px solid #e0e0e0;
+  text-align: center;
+  color: #333;
+}
+
+.tabla-mascotas tbody tr {
+  background-color: white;
+  transition: background-color 0.2s ease;
+}
+
+.tabla-mascotas tbody tr:hover {
+  background-color: #f0f0f8;
+}
+
+.tabla-mascotas tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.tabla-mascotas tbody tr:last-child td:first-child { border-radius: 0 0 0 12px; }
+.tabla-mascotas tbody tr:last-child td:last-child  { border-radius: 0 0 12px 0; }
+
+.tabla-citas {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+.tabla-citas thead tr {
+  background-color: #2c2c54;
+  color: white;
+}
+
+.tabla-citas th {
+  padding: 12px 16px;
+  text-align: left;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+.tabla-citas th:first-child { border-radius: 12px 0 0 0; }
+.tabla-citas th:last-child  { border-radius: 0 12px 0 0; }
+
+.tabla-citas td {
+  padding: 11px 16px;
+  border-bottom: 1px solid #e0e0e0;
+  white-space: nowrap;
+  text-align: center;
+  color: #333;
+}
+
+.tabla-citas tbody tr {
+  background-color: white;
+  transition: background-color 0.2s ease;
+}
+
+.tabla-citas tbody tr:hover {
+  background-color: #f0f0f8;
+}
+
+.tabla-citas tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.tabla-citas tbody tr:last-child td:first-child { border-radius: 0 0 0 12px; }
+.tabla-citas tbody tr:last-child td:last-child  { border-radius: 0 0 12px 0; }
+
+@media (max-width: 768px) {
+  .main-menu {
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  .sidebar.primary {
+    position: fixed;
+    top: 0;
+    left: 0 !important;
+    width: 100% !important;
+    height: auto;
+    border-radius: 0;
+    opacity: 1 !important;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 12px;
+    z-index: 200;
+  }
+
+  .sidebar.primary h2,
+  .sidebar.primary h3 {
+    font-size: 13px;
+    margin: 0;
+  }
+
+  .sidebar.primary h2 { display: none; }
+
+  .nav-links {
+    display: flex;
+    flex-direction: row;
+    gap: 4px;
+  }
+
+  .menu-item {
+    font-size: 11px;
+    padding: 5px 10px;
+    margin: 0;
+  }
+
+  .btn {
+    position: relative;
+    padding: 6px 10px;
+    font-size: 11px;
+  }
+
+  .sidebar.secondary {
+    position: fixed;
+    top: 52px;
+    left: 0 !important;
+    width: 100% !important;
+    height: calc(100% - 52px);
+    border-radius: 0;
+  }
+
+  .slydes-wrapper {
+    flex-direction: column;
+  }
+
+  .slydes {
+    padding: 12px;
+  }
+
+  .tabla-container::after {
+    content: '← desliza para el contenido completo →';
+    display: block;
+    text-align: center;
+    font-size: 11px;
+    color: #888;
+    padding: 4px;
+  }
+
+  .tabla-mascotas td {
+    white-space: nowrap;
+  }
 }
