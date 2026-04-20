@@ -48,6 +48,8 @@ const TablaCitas = ({ citas }) => {
   }
 };
 
+
+
 function MainMenu() {
   const navigate = useNavigate();
   const [dueno, setDueno] = useState(null);
@@ -78,6 +80,21 @@ function MainMenu() {
       }
     });
   };
+
+  useEffect(() => {
+    if (!correo) {
+      Swal.fire({
+        title: "Sesión Expirada",
+        text: "Por favor de iniciar sesion nuevamente",
+        icon: "warning", 
+        timer: 3000,
+        timerProgressBar: true,
+        showConfirmButton: false  
+      }).then(() => {
+        navigate("/");
+      });
+    }
+  }, [correo]);
 
   useEffect(() => {
     if (!correo) return;
@@ -171,9 +188,9 @@ function MainMenu() {
               <span className="icon">🐕</span>
 
               <div className="card-text">
-                <span style={{fontWeight: "bold", fontSize: "30px"}}>Mascotas</span>
+                <span style={{fontWeight: "bold", fontSize: "30px"}}>&nbsp;Mascotas</span>
                 <span className="subtitle">
-                  Usted tiene {noMascotas} {noMascotas === 1 ? "Mascota" : "Mascotas"}
+                &nbsp;Usted tiene {noMascotas} {noMascotas === 1 ? "Mascota" : "Mascotas"}
                 </span>
               </div>
             </div>
@@ -182,9 +199,9 @@ function MainMenu() {
               <span className="icon">🗓️</span>
 
               <div className="card-text">
-                <span style={{fontWeight: "bold", fontSize: "30px"}}>Citas</span>
+                <span style={{fontWeight: "bold", fontSize: "30px"}}>&nbsp;Citas</span>
                 <span className="subtitle">
-                  Usted tiene {noCitas} {noCitas === 1 ? "Cita" : "Citas"} pendientes
+                &nbsp;Usted tiene {noCitas} {noCitas === 1 ? "Cita" : "Citas"} pendientes
                 </span>
               </div>
             </div>
@@ -193,9 +210,9 @@ function MainMenu() {
               <span className="icon">💉</span>
 
               <div className="card-text">
-                <span style={{fontWeight: "bold", fontSize: "30px"}}>Tratamientos</span>
+                <span style={{fontWeight: "bold", fontSize: "30px"}}>&nbsp;Tratamientos</span>
                 <span className="subtitle">
-                  Usted tiene {noCitas} {noCitas === 1 ? "Tratamiento" : "Tratamientos"}
+                &nbsp;Usted tiene {noCitas} {noCitas === 1 ? "Tratamiento" : "Tratamientos"}
                 </span>
               </div>
             </div>

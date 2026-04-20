@@ -7,10 +7,10 @@ export default defineConfig({
       babel: {
         plugins: [['babel-plugin-react-compiler']],
       },
-    }),
+    })
   ],
   server: {
     host: true,
-    allowedHosts: ["dev-server.local"]
+    allowedHosts: ["dev-server.local"],
   }
 })
