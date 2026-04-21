@@ -69,6 +69,10 @@ html body {
   z-index: 100;
 }
 
+.slide-in {
+  animation: slideInRight 0.25s ease forwards;
+}
+
 @keyframes slideFromRight {
   from {
     left: 100%;
@@ -83,9 +87,13 @@ html body {
 /* ── Textos con fade-in ── */
 .sidebar.secondary p {
   opacity: 0;
-  transition: opacity 0.5s ease;
+  animation: fadeInText 0.5s ease 0.5s forwards;
 }
 
+.sidebar.secondary.active p {
+  opacity: 1;
+  text-weight: bold;
+}
 
 /* ── Items internos ── */
 .sidebar.primary .menu-item,
@@ -104,23 +112,6 @@ html body {
 .menu-item:hover {
   background-color: #4b5563;
   color: white;
-}
-
-/* ── Móvil ── */
-@media (max-width: 600px) {
-  :root {
-    --gap:         4px;
-    --primary-w:   calc(100vw - 8px);
-    --secondary-w: calc(100vw - 8px);
-  }
-
-  .sidebar.secondary.active {
-    left: var(--gap);
-  }
-
-  .sidebar.tertiary {
-    width: calc(100vw - 8px);
-  }
 }
 
 /* ── Botones ── */

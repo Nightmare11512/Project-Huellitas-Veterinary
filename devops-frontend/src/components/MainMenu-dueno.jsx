@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { Select, MenuItem } from "@mui/material";
+import { Select, MenuItem, FormControl, InputLabel, Button } from "@mui/material";
 import { useEffect, useState } from "react";
 import Swal from "sweetalert2";
 import "sweetalert2/dist/sweetalert2.min.css";
@@ -7,9 +7,9 @@ import "../styles/MainMenu-dueno.css";
 
 const TablaCitas = ({ citas }) => {
   if (!citas || !Array.isArray(citas)) {
-    return <p>No hay citas registradas.</p>;
+    return <p style={{color: "black", opacity: 1}}>No hay citas registradas.</p>;
   } else if (citas.length === 0) {
-    return <p>No hay citas registradas.</p>;
+    return <p style={{color: "black", opacity: 1}}>No hay citas registradas.</p>;
   } else {
     return (
       <div className="tabla-container">
@@ -28,12 +28,13 @@ const TablaCitas = ({ citas }) => {
                 <td>{cita.fecha}</td>
                 <td>
                   <span className={`estado ${
-                    cita.estado_cita === 1 ? "completado" 
-                    : cita.estado_cita === 2 ? "pendiente" 
+                    cita.estadoCita === 2 ? "completado" 
+                    : cita.estadoCita === 0 ? "Asignacion Pendiente"
+                    : cita.estadoCita === 1 ? "pendiente" 
                     : "cancelado"
                   }`}>
-                    {cita.estado_cita === 1 ? "Completado" 
-                    : cita.estado_cita === 2 ? "Pendiente" 
+                    {cita.estadoCita === 2 ? "Completado" 
+                    : cita.estadoCita === 1 ? "Pendiente" 
                     : "Cancelado"}
                   </span>
                 </td>
@@ -254,44 +255,46 @@ function MainMenu() {
       )}
       
           
-        {activeItem === "Mascotas" && (
-          <>
-            <h2 style={{fontWeight: "bold", color: "black"}}>Datos de Mascotas</h2>
-            <TablaMascotas mascotas={mascotas}></TablaMascotas>
-          </>
-        )}
+      {activeItem === "Mascotas" && (
+        <div className={isLeaving ? "slide-out" : "slide-in"}>
+          <h2 style={{fontWeight: "bold", color: "black"}}>Datos de Mascotas</h2>
+          <TablaMascotas mascotas={mascotas}></TablaMascotas>
+        </div>
+      )}
 
-        {activeItem === "Citas" && (
-          <>
-            <h2 style={{fontWeight: "bold", color: "black"}}>Datos de Citas</h2>
+      {activeItem === "Citas" && (
+        <div className={isLeaving ? "slide-out" : "slide-in"}>
+          <h2 style={{fontWeight: "bold", color: "black"}}>Datos de Citas</h2>
+          <FormControl fullWidth sx={{ m: 1, minWidth: 200 }}>
+            <InputLabel id="select-mascota-label">Filtrar por Mascota</InputLabel>
             <Select
+              labelId="select-mascota-label"
               value={selectedMascota}
-              displayEmpty
+              label="Filtrar por Mascota" // Esto es vital para que el borde no corte el texto
               onChange={(e) => setSelectedMascota(e.target.value)}
             >
-              <MenuItem value="" key={0}><em>Todas</em></MenuItem>
+              <MenuItem value=""><em>Todas las mascotas</em></MenuItem>
               {mascotas.map((m) => (
-                <MenuItem key={m.idMascota} value={m.idMascota}>
-                  {m.nombre}
-                </MenuItem>
+                <MenuItem key={m.idMascota} value={m.idMascota}>{m.nombre}</MenuItem>
               ))}
             </Select>
-            <TablaCitas citas={ListaCitas}></TablaCitas>
-          </>
-        )}
+          </FormControl>
+          <TablaCitas citas={ListaCitas}></TablaCitas>
+        </div>
+      )}
 
-        {activeItem === "Tratamientos" && (
-          <>
-           <h2 style={{fontWeight: "bold", color: "black"}}>Datos de Tratamientos</h2>
-          </>
-        )}
+      {activeItem === "Tratamientos" && (
+        <div className={isLeaving ? "slide-out" : "slide-in"}>
+          <h2 style={{fontWeight: "bold", color: "black"}}>Datos de Tratamientos</h2>
+        </div>
+      )}
 
-        {activeItem !== "" && (
-          <>
-          <p></p>
-            <button className="buton" onClick={() => {changeMenu("")}}>Volver</button>
-          </>
-        )}
+      {activeItem != "" && (
+        <>
+        <p></p>
+        <button onClick={() => {setSelectedMascota(""); setActiveItem("")}} className="btn">Volver</button>
+        </>
+      )} 
       </div>
     </div>
   );
