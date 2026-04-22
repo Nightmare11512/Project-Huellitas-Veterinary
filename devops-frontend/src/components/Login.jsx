@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
+import { getApiBaseHost } from '../Host';
 import Swal from "sweetalert2";
 import "sweetalert2/dist/sweetalert2.min.css";
 import "../styles/login.css";
@@ -58,7 +59,7 @@ function Login() {
     }
   
     try {
-      const response = await fetch(`http://dev-server.local:8080/usuario/login`, {
+      const response = await fetch(`http://${getApiBaseHost()}:8080/usuario/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
@@ -84,7 +85,7 @@ function Login() {
             }
           }
         });
-        fetch(`http://dev-server.local:8080/usuario/getRol?correo=${user}`)
+        fetch(`http://${getApiBaseHost()}:8080/usuario/getRol?correo=${user}`)
         .then(res => res.json())
         .then(data => {
           if (data === 2) {

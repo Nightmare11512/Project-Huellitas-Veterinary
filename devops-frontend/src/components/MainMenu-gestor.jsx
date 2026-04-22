@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { getApiBaseHost } from '../Host';
 
 function MainMenuGestor() {
   const navigate = useNavigate();
@@ -30,7 +31,7 @@ function MainMenuGestor() {
     };
 
     try {
-      const response = await fetch("http://dev-server.local:8080/usuario/guardar", {
+      const response = await fetch(`http://${getApiBaseHost()}:8080/usuario/guardar`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
