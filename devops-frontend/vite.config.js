@@ -10,7 +10,11 @@ export default defineConfig({
     })
   ],
   server: {
-    host: true,
-    allowedHosts: ["dev-server.local"],
+    host: '0.0.0.0',
+    port: 5173,
+    allowedHosts: ['.local']
+  },
+  preview: {
+    allowedHosts: ['.local']   // workaround para el bug
   }
 })

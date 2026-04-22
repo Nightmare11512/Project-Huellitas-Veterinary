@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { Select, MenuItem, FormControl, InputLabel, Button } from "@mui/material";
 import { useEffect, useState } from "react";
+import { getApiBaseHost } from '../Host';
 import Swal from "sweetalert2";
 import "sweetalert2/dist/sweetalert2.min.css";
 import "../styles/MainMenu-dueno.css";
@@ -132,7 +133,7 @@ function MainMenu() {
 
   useEffect(() => {
     if (!correo) return;
-    fetch("http://dev-server.local:8080/usuario/getNombre", {
+    fetch(`http://${getApiBaseHost()}:8080/usuario/getNombre`, {
       method: "POST",
       headers: { "Content-Type": "text/plain" },
       body: correo,
@@ -144,7 +145,7 @@ function MainMenu() {
 
   useEffect(() => {
     if (!correo) return;
-      fetch(`http://dev-server.local:8080/mascota/usuario/${correo}`)
+      fetch(`http://${getApiBaseHost()}:8080/mascota/usuario/${correo}`)
       .then(res => res.json())
       .then(data => setNoMascota(data))
       .catch(err => console.error(err));
@@ -152,7 +153,7 @@ function MainMenu() {
 
   useEffect(() => {
     if (!correo) return;
-      fetch(`http://dev-server.local:8080/cita/usuario/${correo}`)
+      fetch(`http://${getApiBaseHost()}:8080/cita/usuario/${correo}`)
       .then(res => res.json())
       .then(data => setNoCita(data))
       .catch(err => console.error(err));
@@ -172,12 +173,12 @@ function MainMenu() {
   useEffect(() => {
     if (!correo) return;
     if (mascotaSeleccionadaObj) {
-      fetch(`http://dev-server.local:8080/cita/${correo}/${mascotaSeleccionadaObj.idMascota}`)
+      fetch(`http://${getApiBaseHost()}:8080/cita/${correo}/${mascotaSeleccionadaObj.idMascota}`)
       .then(res => res.json())
       .then(data => setCitas(data))
       .catch(err => console.error(err));
     } else {
-      fetch(`http://dev-server.local:8080/cita/${correo}`)
+      fetch(`http://${getApiBaseHost()}:8080/cita/${correo}`)
       .then(res => res.json())
       .then(data => setCitas(data))
       .catch(err => console.error(err));
@@ -186,7 +187,7 @@ function MainMenu() {
 
   useEffect(() => {
     if (!correo) return;
-    fetch(`http://dev-server.local:8080/mascota/${correo}`)
+    fetch(`http://${getApiBaseHost()}:8080/mascota/${correo}`)
     .then(res => res.json())
     .then(data => setMascotas(data))
     .catch((err => console.error(err)));
