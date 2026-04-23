@@ -57,6 +57,8 @@ function Login() {
       alert("Ingresa un correo válido");
       return;
     }
+
+    console.log(getApiBaseHost());
   
     try {
       const response = await fetch(`http://${getApiBaseHost()}:8080/usuario/login`, {
