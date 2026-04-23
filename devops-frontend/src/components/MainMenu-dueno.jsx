@@ -52,9 +52,9 @@ const TablaCitas = ({ citas }) => {
 
 const TablaMascotas = ({mascotas}) => {
   if (!mascotas || !Array.isArray(mascotas)){
-    return <p color="black">No hay mascotas registradas</p>
+    return <p style={{color: "black", opacity: 1}}>No hay mascotas registradas</p>
   } else if (mascotas.length === 0) {
-    <p color="black">No hay citas registradas</p>
+    <p style={{color: "black", opacity: 1}}>No hay mascotas registradas</p>
   } else {
     return (
       <div className="tabla-container">

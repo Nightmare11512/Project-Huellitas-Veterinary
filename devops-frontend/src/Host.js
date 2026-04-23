@@ -1,4 +1,4 @@
 // api.js
 export const getApiBaseHost = () => {
-    return `${window.location.hostname}.local`;
+    return `${window.location.hostname}`;
   };
