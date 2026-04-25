@@ -1,8 +1,14 @@
 package com.example.Proyect_DevOps.models;
 
-import jakarta.persistence.*;
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "tratamientos")
@@ -15,15 +21,17 @@ public class TratamientoModel {
     private String medicamento;
     private String descripcion;
     private double costo;
+    private int estatus;
 
     @ManyToMany(mappedBy = "tratamientos")
     private List<Consulta_MedicaModel> consultas = new ArrayList<>();
 
 
-    public TratamientoModel(String medicamento, String descripcion, double costo){
+    public TratamientoModel(String medicamento, String descripcion, double costo, int estatus){
         this.medicamento = medicamento;
         this.descripcion = descripcion;
         this.costo = costo;
+        this.estatus = estatus;
     }
 
     public TratamientoModel(){
@@ -69,9 +77,17 @@ public class TratamientoModel {
         this.consultas = consultas;
     }
 
+    public int getStatus(){
+        return estatus;
+    }
+
+    public void setStatus(int estatus){
+        this.estatus = estatus;
+    }
+
     @Override
     public String toString(){
         return "idTratamiento=" + idTratameinto + ", medicamento=" + medicamento + 
-        ", descripcion=" + descripcion + ", costo=" + costo;
+        ", descripcion=" + descripcion + ", costo=" + costo + ", estatus=" + estatus;
     }
 }

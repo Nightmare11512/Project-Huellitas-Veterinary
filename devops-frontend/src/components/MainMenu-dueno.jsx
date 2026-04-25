@@ -54,7 +54,7 @@ const TablaMascotas = ({mascotas}) => {
   if (!mascotas || !Array.isArray(mascotas)){
     return <p style={{color: "black", opacity: 1}}>No hay mascotas registradas</p>
   } else if (mascotas.length === 0) {
-    <p style={{color: "black", opacity: 1}}>No hay mascotas registradas</p>
+    return <p style={{color: "black", opacity: 1}}>No hay mascotas registradas</p>
   } else {
     return (
       <div className="tabla-container">
@@ -82,6 +82,49 @@ const TablaMascotas = ({mascotas}) => {
         </table>
       </div>
     );
+  }
+};
+
+const TablaTratamientos = ({tratamientos}) => {
+  if (!tratamientos || !Array.isArray(tratamientos)) {
+    return <p style={{color: "black", opacity: 1}}>No hay tratamientos en su historial</p>
+  } else if (tratamientos.length === 0) {
+    return <p style={{color: "black", opacity: 1}}></p>
+  } else {
+    return (
+      <div className="tabla-container">
+        <table className="tabla-tratamientos">
+          <thead>
+            <tr>
+              <th>Medicamento</th>
+              <th>Descripción</th>
+              <th>Costo</th>
+              <th>Estatus</th>
+            </tr>
+          </thead>
+          <tbody>
+            {tratamientos.map((tratamiento) => (
+              <tr key={tratamiento.idTratamiento}>
+                <td>{tratamiento.medicamento}</td>
+                <td>{tratamiento.descripcion}</td>
+                <td>{tratamiento.costo}</td>
+                <td>
+                  <span className={`estado ${
+                    tratamiento.estatus === 1 ? "Completado" 
+                    : tratamiento.estatus === 100 ? "Asignacion Pendiente"
+                    : cita.estatus === 0 ? "pendiente" 
+                    : "cancelado"
+                  }`}>
+                    {tratamiento.estatus === 0 ? "Activo"
+                    : "Completado"}
+                  </span>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    )
   }
 };
 
@@ -192,6 +235,38 @@ function MainMenu() {
     .then(data => setMascotas(data))
     .catch((err => console.error(err)));
   }, [correo])
+
+  useEffect(() => {
+    if (!citas || citas === 0) return;
+
+    const hoy = new Date();
+
+    if (citas && citas.length > 0) {
+      
+      citas.forEach(element => {
+        if (element.estadoCita === 1) {
+          
+          const fechaCitaHoy = (element.fecha);
+          const diferenciaDias = Math.ceil((fechaCitaHoy - hoy) / (1000 * 60 * 60 * 24));
+
+          const keyRecordatorio = `recordatorio_${cita.idCita}`;
+          const yaSeAviso = localStorage.getItem(keyRecordatorio);
+
+          if (diferenciaDias === 1 && !yaSeAviso) {
+            Swal.fire({
+              title: "Recordatorio de cita",
+              text: `Tienes una cita mañana ${element.fecha} a las ${element.entradaAgendada}`,
+              icon: "info",
+              confirmButtonColor: "#3085d6",
+              confirmButtonText: "Entendido"
+            }).then (() => {
+              localStorage.setItem(keyRecordatorio, "true");
+            });
+          }
+        }
+      });
+    }
+  }, [citas])
 
   return (
     <div className="main-menu" style={{ display: "flex" }}>
