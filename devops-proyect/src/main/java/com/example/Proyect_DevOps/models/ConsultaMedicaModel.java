@@ -1,12 +1,21 @@
 package com.example.Proyect_DevOps.models;
 
-import jakarta.persistence.*;
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "Consulta_Medica")
-public class Consulta_MedicaModel {
+@Table(name = "Consulta-Medica")
+public class ConsultaMedicaModel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,7 +33,7 @@ public class Consulta_MedicaModel {
     private String diagnostico;
     private String recomendaciones;
 
-    public Consulta_MedicaModel(CitaModel cita, String motivo, 
+    public ConsultaMedicaModel(CitaModel cita, String motivo, 
         String diagnostico, String recomendaciones){
 
         this.cita = cita;
@@ -33,7 +42,7 @@ public class Consulta_MedicaModel {
         this.recomendaciones = recomendaciones;
     }
 
-    public Consulta_MedicaModel(){    
+    public ConsultaMedicaModel(){    
     }
 
     public int getId(){
@@ -76,9 +85,17 @@ public class Consulta_MedicaModel {
         this.tratamientos = tratamientos;
     }
 
+    public CitaModel getCita() {
+        return cita;
+    }
+
+    public void setCita(CitaModel cita) {
+        this.cita = cita;
+    }
+
     @Override
     public String toString(){
         return "idConsulta=" + idConsulta + ", Motivo=" + motivo + 
-        ", Diagnostico=" + diagnostico + ", Recomendaciones=" + recomendaciones;
+        ", Diagnostico=" + diagnostico + ", Recomendaciones=" + recomendaciones + ", cita=" + cita;
     }
 }

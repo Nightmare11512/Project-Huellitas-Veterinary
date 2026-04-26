@@ -141,6 +141,7 @@ function MainMenu() {
   const [noCitas, setNoCita] = useState(0);
   const [isLeaving, setIsLeaving] = useState(false);
   const mascotaSeleccionadaObj = mascotas.find((m) => m.idMascota === Number(selectedMascota));
+  const [tratamientos, setTratamientos] = useState([]);
 
   const handleLogout = () => {
     Swal.fire({
@@ -268,6 +269,21 @@ function MainMenu() {
     }
   }, [citas])
 
+  useEffect(() => {
+    if (!correo) return;
+    if (mascotaSeleccionadaObj) {
+      fetch(`http://${getApiBaseHost()}:8080//`)
+      .then(res => res.json())
+      .then(data => setTratamientos(data))
+      .catch(err => console.log(err));
+    } else {
+      fetch(`http://${getApiBaseHost()}:8080///`)
+      .then(res => res.json())
+      .then(data => setTratamientos(data))
+      .catch(err => console.log(err));
+    }
+  }, [correo, mascotaSeleccionadaObj]);
+
   return (
     <div className="main-menu" style={{ display: "flex" }}>
 
@@ -362,6 +378,21 @@ function MainMenu() {
       {activeItem === "Tratamientos" && (
         <div className={isLeaving ? "slide-out" : "slide-in"}>
           <h2 style={{fontWeight: "bold", color: "black"}}>Datos de Tratamientos</h2>
+          <FormControl fullWidth sx={{ m: 1, minWidth: 200 }}>
+            <InputLabel id="select-mascota-label">Filtrar por Mascota</InputLabel>
+            <Select
+              labelId="select-mascota-label"
+              value={selectedMascota}
+              label="Filtrar por Mascota" // Esto es vital para que el borde no corte el texto
+              onChange={(e) => setSelectedMascota(e.target.value)}
+            >
+              <MenuItem value=""><em>Todas las mascotas</em></MenuItem>
+              {mascotas.map((m) => (
+                <MenuItem key={m.idMascota} value={m.idMascota}>{m.nombre}</MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+          <TablaTratamientos tratamientos={null}></TablaTratamientos>
         </div>
       )}
 
