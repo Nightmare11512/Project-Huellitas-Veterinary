@@ -10,5 +10,6 @@ public class TratamientoDTO {
     private String descripcion;
     private double costo;
     private int estatus;
+    private String mascotaNombre;
 
 }

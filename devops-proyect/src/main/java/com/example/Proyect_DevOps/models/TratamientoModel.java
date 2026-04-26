@@ -24,7 +24,7 @@ public class TratamientoModel {
     private int estatus;
 
     @ManyToMany(mappedBy = "tratamientos")
-    private List<Consulta_MedicaModel> consultas = new ArrayList<>();
+    private List<ConsultaMedicaModel> consultas = new ArrayList<>();
 
 
     public TratamientoModel(String medicamento, String descripcion, double costo, int estatus){
