@@ -110,7 +110,7 @@ const TablaTratamientos = ({tratamientos}) => {
                 <td>{tratamiento.costo}</td>
                 <td>
                   <span className={`estado ${
-                    tratamiento.estatus === 1 ? "Completado" 
+                    tratamiento.estatus === 1 ? "completado" 
                     : tratamiento.estatus === 100 ? "Asignacion Pendiente"
                     : cita.estatus === 0 ? "pendiente" 
                     : "cancelado"
