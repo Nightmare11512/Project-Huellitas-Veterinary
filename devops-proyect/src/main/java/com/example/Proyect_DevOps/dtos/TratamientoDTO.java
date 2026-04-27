@@ -5,7 +5,7 @@ import lombok.Data;
 @Data
 public class TratamientoDTO {
 
-    private int idTratameinto;
+    private int idTratamiento;
     private String medicamento;
     private String descripcion;
     private double costo;

@@ -69,11 +69,11 @@ public class TratamientoModel {
         this.costo = costo;
     }
 
-    public List<Consulta_MedicaModel> getListaConsultas(){
+    public List<ConsultaMedicaModel> getListaConsultas(){
         return consultas;
     }
 
-    public void setListaConsultas(List<Consulta_MedicaModel> consultas){
+    public void setListaConsultas(List<ConsultaMedicaModel> consultas){
         this.consultas = consultas;
     }
 

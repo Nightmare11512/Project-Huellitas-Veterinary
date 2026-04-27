@@ -272,7 +272,7 @@ function MainMenu() {
   useEffect(() => {
     if (!correo) return;
     if (mascotaSeleccionadaObj) {
-      fetch(`http://${getApiBaseHost()}:8080//`)
+      fetch(`http://${getApiBaseHost()}:8080/tratamiento/usuario/${correo}`)
       .then(res => res.json())
       .then(data => setTratamientos(data))
       .catch(err => console.log(err));
