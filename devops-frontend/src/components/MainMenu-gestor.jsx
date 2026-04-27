@@ -17,7 +17,6 @@ function MainMenuGestor() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     // Crear el objeto usuario según tu backend
     const usuario = {
       nombre,
@@ -54,13 +53,6 @@ function MainMenuGestor() {
       console.error("Error al enviar el usuario:", err);
       alert("Error de conexión con el backend");
     }
-
-  setCorreo('');
-  setContrasena('');
-  setNombre('');
-  setPaterno('');
-  setMaterno('');
-  setRol('1');
   };
 
   return (
@@ -121,7 +113,7 @@ function MainMenuGestor() {
         <option value="3">Gestor</option>
         <option value="4">Veterinario</option>
       </select></p>
-      <p><button onClick={() => {handleSubmit; }}>Crear usuario</button></p>
+      <p><button onClick={handleSubmit}>Crear usuario</button></p>
       <button onClick={handleLogout}>Cerrar Sesión</button>
     </div>
   );

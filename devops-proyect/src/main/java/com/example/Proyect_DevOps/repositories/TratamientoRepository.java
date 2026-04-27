@@ -10,5 +10,7 @@ import com.example.Proyect_DevOps.models.TratamientoModel;
 @Repository
 public interface TratamientoRepository extends JpaRepository<TratamientoModel, Integer>{
 
-    List<TratamientoModel> findByTratamientoModel_ConsultaMedicaModel_Citas_Usuario_correo(String correo);
+    List<TratamientoModel> findByconsultas_cita_usuarioMascota_correo(String correo);
+
+    List<TratamientoModel> findByconsultas_cita_usuarioMascota_correoAndConsultas_cita_mascotaModel_idMascota(String correo, int idMascota);
 }

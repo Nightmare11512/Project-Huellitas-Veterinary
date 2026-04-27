@@ -2,9 +2,18 @@ package com.example.Proyect_DevOps.models;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.List;
 import java.util.ArrayList;
-import jakarta.persistence.*;
+import java.util.List;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "citas")
@@ -32,7 +41,7 @@ public class CitaModel {
 
     @ManyToMany
     @JoinTable(name= "Cita-Servicio", joinColumns = @JoinColumn(name = "IdCita"),
-    inverseJoinColumns = @JoinColumn(name = "IdSucursal"))
+    inverseJoinColumns = @JoinColumn(name = "IdServicio"))
     public List<ServicioModel> servicios = new ArrayList<>();
 
     public CitaModel(MascotaModel mascotaModel, UsuarioModel usuarioMascota, 
