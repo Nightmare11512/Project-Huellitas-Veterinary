@@ -1,0 +1,101 @@
+name: CI - Huellitas Veterinary
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+
+jobs:
+
+  # ─────────────────────────────────────────
+  # JOB 1: Backend - Spring Boot (Java 21)
+  # ─────────────────────────────────────────
+  backend:
+    name: Build Backend
+    runs-on: ubuntu-latest
+
+    services:
+      mariadb:
+        image: mariadb:11
+        env:
+          MARIADB_ROOT_PASSWORD: root
+          MARIADB_DATABASE: huellitas_db
+          MARIADB_USER: Admin
+          MARIADB_PASSWORD: a123b123
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="healthcheck.sh --connect --innodb_initialized"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
+
+    defaults:
+      run:
+        working-directory: devops-proyect
+
+    steps:
+      - name: Checkout del código
+        uses: actions/checkout@v4
+
+      - name: Configurar Java 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+          cache: 'maven'
+
+      - name: Instalar dependencias y compilar
+        run: mvn clean install -DskipTests
+
+      - name: Ejecutar tests
+        run: mvn test
+        env:
+          SPRING_DATASOURCE_URL: jdbc:mariadb://localhost:3306/huellitas_db
+          SPRING_DATASOURCE_USERNAME: Admin
+          SPRING_DATASOURCE_PASSWORD: a123b123
+
+      - name: Guardar JAR
+        uses: actions/upload-artifact@v4
+        with:
+          name: backend-jar
+          path: devops-proyect/target/*.jar
+
+  # ─────────────────────────────────────────
+  # JOB 2: Frontend - React + Vite (Node 24)
+  # ─────────────────────────────────────────
+  frontend:
+    name: Build Frontend
+    needs: backend
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: devops-frontend
+
+    steps:
+      - name: Checkout del código
+        uses: actions/checkout@v4
+
+      - name: Configurar Node.js 24
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: 'npm'
+          cache-dependency-path: devops-frontend/package-lock.json
+
+      - name: Instalar dependencias
+        run: npm ci
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Build del proyecto
+        run: npm run build
+
+      - name: Guardar build frontend
+        uses: actions/upload-artifact@v4
+        with:
+          name: frontend-dist
+          path: devops-frontend/dist/
