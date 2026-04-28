@@ -18,8 +18,18 @@ public class TratamientoController {
     @Autowired
     private TratamientoService tratamientoService;
 
-    @GetMapping("/usuario/{correo}")
+    @GetMapping("/usuario/{correo:.+}")
     public List<TratamientoDTO> getTratamientosPorUsuario(@PathVariable String correo){
         return tratamientoService.mostrarTratamientosPorUsuario(correo);
+    }
+
+    @GetMapping("/{correo:.+}")
+    public long contarTratamientosIncompletos(@PathVariable String correo) {
+        return tratamientoService.contarTratamientosIncompletos(correo);
+    }
+
+    @GetMapping("/usuario/{correo:.+}/{idMascota}")
+    public List<TratamientoDTO> getTratamientosPorUsuarioYMascota(@PathVariable String correo, @PathVariable int idMascota) {
+        return tratamientoService.mostrarTratamientosPorUsuarioYMascota(correo, idMascota);
     }
 }

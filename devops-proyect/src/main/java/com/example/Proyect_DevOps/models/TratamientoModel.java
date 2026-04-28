@@ -16,7 +16,7 @@ public class TratamientoModel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int idTratameinto;
+    private int idTratamiento;
 
     private String medicamento;
     private String descripcion;
@@ -35,14 +35,6 @@ public class TratamientoModel {
     }
 
     public TratamientoModel(){
-    }
-
-    public int getId(){
-        return idTratameinto;
-    }
-
-    public void setId(int idTratameinto){
-        this.idTratameinto = idTratameinto;
     }
 
     public String getMedicamento(){
@@ -87,7 +79,15 @@ public class TratamientoModel {
 
     @Override
     public String toString(){
-        return "idTratamiento=" + idTratameinto + ", medicamento=" + medicamento + 
+        return "idTratamiento=" + idTratamiento + ", medicamento=" + medicamento + 
         ", descripcion=" + descripcion + ", costo=" + costo + ", estatus=" + estatus;
+    }
+
+    public int getIdTratamiento() {
+        return idTratamiento;
+    }
+
+    public void setIdTratamiento(int idTratamiento) {
+        this.idTratamiento = idTratamiento;
     }
 }
