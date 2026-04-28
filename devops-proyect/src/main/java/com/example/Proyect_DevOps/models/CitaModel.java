@@ -58,11 +58,11 @@ public class CitaModel {
     public CitaModel(){
     }
 
-    public int getIdServicio(){
+    public int getIdCita(){
         return idCita;
     }
 
-    public void setIdServicio(int idServicio){
+    public void setIdCita(int idServicio){
         this.idCita = idServicio;
     }
 

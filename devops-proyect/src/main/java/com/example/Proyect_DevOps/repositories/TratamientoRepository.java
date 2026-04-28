@@ -13,4 +13,6 @@ public interface TratamientoRepository extends JpaRepository<TratamientoModel, I
     List<TratamientoModel> findByconsultas_cita_usuarioMascota_correo(String correo);
 
     List<TratamientoModel> findByconsultas_cita_usuarioMascota_correoAndConsultas_cita_mascotaModel_idMascota(String correo, int idMascota);
+
+    long countByconsultas_cita_usuarioMascota_correoAndEstatus(String correo, int estatus);
 }

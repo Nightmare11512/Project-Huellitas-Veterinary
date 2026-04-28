@@ -2,6 +2,9 @@ import { useNavigate } from "react-router-dom";
 import { Select, MenuItem, FormControl, InputLabel, Button } from "@mui/material";
 import { useEffect, useState } from "react";
 import { getApiBaseHost } from '../Host';
+import { LocalizationProvider, DatePicker, TimePicker } from '@mui/x-date-pickers';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import dayjs from 'dayjs';
 import Swal from "sweetalert2";
 import "sweetalert2/dist/sweetalert2.min.css";
 import "../styles/MainMenu-dueno.css";
@@ -112,7 +115,7 @@ const TablaTratamientos = ({tratamientos}) => {
                   <span className={`estado ${
                     tratamiento.estatus === 1 ? "completado" 
                     : tratamiento.estatus === 100 ? "Asignacion Pendiente"
-                    : cita.estatus === 0 ? "pendiente" 
+                    : tratamiento.estatus === 0 ? "pendiente" 
                     : "cancelado"
                   }`}>
                     {tratamiento.estatus === 0 ? "Activo"
@@ -128,6 +131,7 @@ const TablaTratamientos = ({tratamientos}) => {
   }
 };
 
+
 function MainMenu() {
   const navigate = useNavigate();
   const [dueno, setDueno] = useState(null);
@@ -142,6 +146,10 @@ function MainMenu() {
   const [isLeaving, setIsLeaving] = useState(false);
   const mascotaSeleccionadaObj = mascotas.find((m) => m.idMascota === Number(selectedMascota));
   const [tratamientos, setTratamientos] = useState([]);
+  const [noTratamientos, setNoTratamientos] = useState("");
+  const [mostrarFormCita, setMostrarFormCita] = useState(false);
+  const [fechaCita, setFechaCita] = useState(null);
+  const [horaCita, setHoraCita] = useState(null);
 
   const handleLogout = () => {
     Swal.fire({
@@ -203,6 +211,14 @@ function MainMenu() {
       .catch(err => console.error(err));
   }, [correo]);
 
+  useEffect(() => {
+    if (!correo) return;
+    fetch(`http://${getApiBaseHost()}:8080/tratamiento/${encodeURIComponent(correo)}`)
+    .then(res => res.json())
+    .then(data => setNoTratamientos(data))
+    .catch(err => console.error(err));
+  }, [correo]);
+
   const changeMenu = (item) => {
     if (item === activeItem) return;
 
@@ -216,17 +232,22 @@ function MainMenu() {
 
   useEffect(() => {
     if (!correo) return;
-    if (mascotaSeleccionadaObj) {
-      fetch(`http://${getApiBaseHost()}:8080/cita/${correo}/${mascotaSeleccionadaObj.idMascota}`)
-      .then(res => res.json())
-      .then(data => setCitas(data))
-      .catch(err => console.error(err));
-    } else {
-      fetch(`http://${getApiBaseHost()}:8080/cita/${correo}`)
-      .then(res => res.json())
-      .then(data => setCitas(data))
-      .catch(err => console.error(err));
-    }
+  
+    const url = mascotaSeleccionadaObj
+      ? `http://${getApiBaseHost()}:8080/cita/${encodeURIComponent(correo)}/${mascotaSeleccionadaObj.idMascota}`
+      : `http://${getApiBaseHost()}:8080/cita/${correo}`;
+  
+    fetch(url)
+      .then(async (res) => {
+        if (!res.ok) {
+          const text = await res.text();
+          throw new Error(text);
+        }
+        return res.json();
+      })
+      .then((data) => setCitas(data))
+      .catch((err) => console.error("Error en cita API:", err));
+  
   }, [correo, mascotaSeleccionadaObj]);
 
   useEffect(() => {
@@ -238,19 +259,19 @@ function MainMenu() {
   }, [correo])
 
   useEffect(() => {
-    if (!citas || citas === 0) return;
+    if (!ListaCitas || ListaCitas === 0) return;
 
     const hoy = new Date();
 
-    if (citas && citas.length > 0) {
+    if (ListaCitas && ListaCitas.length > 0) {
       
-      citas.forEach(element => {
+      ListaCitas.forEach(element => {
         if (element.estadoCita === 1) {
           
-          const fechaCitaHoy = (element.fecha);
+          const fechaCitaHoy = new Date(element.fecha);
           const diferenciaDias = Math.ceil((fechaCitaHoy - hoy) / (1000 * 60 * 60 * 24));
 
-          const keyRecordatorio = `recordatorio_${cita.idCita}`;
+          const keyRecordatorio = `recordatorio_${element.idCita}`;
           const yaSeAviso = localStorage.getItem(keyRecordatorio);
 
           if (diferenciaDias === 1 && !yaSeAviso) {
@@ -267,17 +288,17 @@ function MainMenu() {
         }
       });
     }
-  }, [citas])
+  }, [ListaCitas])
 
   useEffect(() => {
     if (!correo) return;
-    if (mascotaSeleccionadaObj) {
-      fetch(`http://${getApiBaseHost()}:8080/tratamiento/usuario/${correo}`)
+    if (!mascotaSeleccionadaObj) {
+      fetch(`http://${getApiBaseHost()}:8080/tratamiento/usuario/${encodeURIComponent(correo)}`)
       .then(res => res.json())
       .then(data => setTratamientos(data))
       .catch(err => console.log(err));
-    } else {
-      fetch(`http://${getApiBaseHost()}:8080///`)
+     } else {
+      fetch(`http://${getApiBaseHost()}:8080/tratamiento/usuario/${encodeURIComponent(correo)}/${mascotaSeleccionadaObj.idMascota}`)
       .then(res => res.json())
       .then(data => setTratamientos(data))
       .catch(err => console.log(err));
@@ -285,125 +306,174 @@ function MainMenu() {
   }, [correo, mascotaSeleccionadaObj]);
 
   return (
-    <div className="main-menu" style={{ display: "flex" }}>
+    <>
+      <div className="main-menu" style={{ display: "flex" }}>
 
-      <div className={`sidebar primary ${dueno ? "active" : ""}`}>
-        <h2 style={{color: "white"}}>Menú Principal</h2>
-        <h3 style={{color: "white"}}>Bienvenido, {dueno ? dueno.nombre : "Dueño de Mascota"}</h3>
-        <nav className="nav-links">
-          {menuItems.map((item) => (
-            <div
-              key={item}
-              className={`menu-item ${activeItem === item ? "active" : ""}`}
-              onClick={() => {changeMenu(item); setSelectedMascota("")}}
-              style={{ cursor: "pointer", margin: "5px 0" }}>
-              {item}
-            </div>
-          ))}
-        </nav>
-        <button type="button" onClick={handleLogout} className="btn">Cerrar Sesión</button>
-      </div>
-      <div className={`sidebar secondary ${activeItem}`}>
+        <div className={`sidebar primary ${dueno ? "active" : ""}`}>
+          <h2 style={{color: "white"}}>Menú Principal</h2>
+          <h3 style={{color: "white"}}>Bienvenido, {dueno ? dueno.nombre : "Dueño de Mascota"}</h3>
+          <nav className="nav-links">
+            {menuItems.map((item) => (
+              <div
+                key={item}
+                className={`menu-item ${activeItem === item ? "active" : ""}`}
+                onClick={() => {changeMenu(item); setSelectedMascota("")}}
+                style={{ cursor: "pointer", margin: "5px 0" }}>
+                {item}
+              </div>
+            ))}
+          </nav>
+          <button type="button" onClick={handleLogout} className="btn">Cerrar Sesión</button>
+        </div>
+        <div className={`sidebar secondary ${activeItem}`}>
 
-      {activeItem === "" && (
-        <>
-          <h2 style={{fontWeight: "bold", color: "black"}}>Datos Generales</h2>
+        {activeItem === "" && (
+          <>
+            <h2 style={{fontWeight: "bold", color: "black"}}>Datos Generales</h2>
 
-          <div className="slydes-wrapper">
-            <div className={`slydes ${isLeaving ? "slide-out" : ""}`}>
-              <span className="icon">🐕</span>
+            <div className="slydes-wrapper">
+              <div className={`slydes ${isLeaving ? "slide-out" : ""}`}>
+                <span className="icon">🐕</span>
 
-              <div className="card-text">
-                <span style={{fontWeight: "bold", fontSize: "30px"}}>&nbsp;Mascotas</span>
-                <span className="subtitle">
-                &nbsp;Usted tiene {noMascotas} {noMascotas === 1 ? "Mascota" : "Mascotas"}
-                </span>
+                <div className="card-text">
+                  <span style={{fontWeight: "bold", fontSize: "30px"}}>&nbsp;Mascotas</span>
+                  <span className="subtitle">
+                  &nbsp;Usted tiene {noMascotas} {noMascotas === 1 ? "Mascota" : "Mascotas"}
+                  </span>
+                </div>
+              </div>
+
+              <div className={`slydes ${isLeaving ? "slide-out" : ""}`}>
+                <span className="icon">🗓️</span>
+
+                <div className="card-text">
+                  <span style={{fontWeight: "bold", fontSize: "30px"}}>&nbsp;Citas</span>
+                  <span className="subtitle">
+                  &nbsp;Usted tiene {noCitas} {noCitas === 1 ? "Cita" : "Citas"} pendientes
+                  </span>
+                </div>
+              </div>
+
+              <div className={`slydes ${isLeaving ? "slide-out" : ""}`}>
+                <span className="icon">💉</span>
+
+                <div className="card-text">
+                  <span style={{fontWeight: "bold", fontSize: "30px"}}>&nbsp;Tratamientos</span>
+                  <span className="subtitle">
+                  &nbsp;Usted tiene {noTratamientos} {noTratamientos === 1 ? "Tratamiento" : "Tratamientos"}
+                  </span>
+                </div>
               </div>
             </div>
+          </>
+        )}
 
-            <div className={`slydes ${isLeaving ? "slide-out" : ""}`}>
-              <span className="icon">🗓️</span>
 
-              <div className="card-text">
-                <span style={{fontWeight: "bold", fontSize: "30px"}}>&nbsp;Citas</span>
-                <span className="subtitle">
-                &nbsp;Usted tiene {noCitas} {noCitas === 1 ? "Cita" : "Citas"} pendientes
-                </span>
-              </div>
-            </div>
-
-            <div className={`slydes ${isLeaving ? "slide-out" : ""}`}>
-              <span className="icon">💉</span>
-
-              <div className="card-text">
-                <span style={{fontWeight: "bold", fontSize: "30px"}}>&nbsp;Tratamientos</span>
-                <span className="subtitle">
-                &nbsp;Usted tiene {noCitas} {noCitas === 1 ? "Tratamiento" : "Tratamientos"}
-                </span>
-              </div>
-            </div>
+        {activeItem === "Mascotas" && (
+          <div className={isLeaving ? "slide-out" : "slide-in"}>
+            <h2 style={{fontWeight: "bold", color: "black"}}>Datos de Mascotas</h2>
+            <TablaMascotas mascotas={mascotas}></TablaMascotas>
           </div>
-        </>
-      )}
-      
-          
-      {activeItem === "Mascotas" && (
-        <div className={isLeaving ? "slide-out" : "slide-in"}>
-          <h2 style={{fontWeight: "bold", color: "black"}}>Datos de Mascotas</h2>
-          <TablaMascotas mascotas={mascotas}></TablaMascotas>
-        </div>
-      )}
+        )}
 
-      {activeItem === "Citas" && (
-        <div className={isLeaving ? "slide-out" : "slide-in"}>
-          <h2 style={{fontWeight: "bold", color: "black"}}>Datos de Citas</h2>
-          <FormControl fullWidth sx={{ m: 1, minWidth: 200 }}>
-            <InputLabel id="select-mascota-label">Filtrar por Mascota</InputLabel>
-            <Select
-              labelId="select-mascota-label"
-              value={selectedMascota}
-              label="Filtrar por Mascota" // Esto es vital para que el borde no corte el texto
-              onChange={(e) => setSelectedMascota(e.target.value)}
-            >
-              <MenuItem value=""><em>Todas las mascotas</em></MenuItem>
-              {mascotas.map((m) => (
-                <MenuItem key={m.idMascota} value={m.idMascota}>{m.nombre}</MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-          <TablaCitas citas={ListaCitas}></TablaCitas>
-        </div>
-      )}
+        {activeItem === "Citas" && (
+          <div className={isLeaving ? "slide-out" : "slide-in"}>
+            <h2 style={{fontWeight: "bold", color: "black"}}>Datos de Citas</h2> 
+            <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+              <FormControl fullWidth sx={{ m: 1, minWidth: 200 }}>
+                  <InputLabel id="select-mascota-label">Filtrar por Mascota</InputLabel>
+                  <Select
+                      labelId="select-mascota-label"
+                      value={selectedMascota}
+                      label="Filtrar por Mascota"
+                      onChange={(e) => setSelectedMascota(e.target.value)}
+                  >
+                      <MenuItem value=""><em>Todas las mascotas</em></MenuItem>
+                      {mascotas.map((m) => (
+                          <MenuItem key={m.idMascota} value={m.idMascota}>{m.nombre}</MenuItem>
+                      ))}
+                  </Select>
+              </FormControl>
+              <button className="botonCrear" onClick={() => setMostrarFormCita(true)}>Crear Cita</button>
+          </div>
+            <TablaCitas citas={ListaCitas}></TablaCitas>
+          </div>
+        )}
 
-      {activeItem === "Tratamientos" && (
-        <div className={isLeaving ? "slide-out" : "slide-in"}>
-          <h2 style={{fontWeight: "bold", color: "black"}}>Datos de Tratamientos</h2>
-          <FormControl fullWidth sx={{ m: 1, minWidth: 200 }}>
-            <InputLabel id="select-mascota-label">Filtrar por Mascota</InputLabel>
-            <Select
-              labelId="select-mascota-label"
-              value={selectedMascota}
-              label="Filtrar por Mascota" // Esto es vital para que el borde no corte el texto
-              onChange={(e) => setSelectedMascota(e.target.value)}
-            >
-              <MenuItem value=""><em>Todas las mascotas</em></MenuItem>
-              {mascotas.map((m) => (
-                <MenuItem key={m.idMascota} value={m.idMascota}>{m.nombre}</MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-          <TablaTratamientos tratamientos={null}></TablaTratamientos>
-        </div>
-      )}
+        {activeItem === "Tratamientos" && (
+          <div className={isLeaving ? "slide-out" : "slide-in"}>
+            <h2 style={{fontWeight: "bold", color: "black"}}>Datos de Tratamientos</h2>
+            <FormControl fullWidth sx={{ m: 1, minWidth: 200 }}>
+              <InputLabel id="select-mascota-label">Filtrar por Mascota</InputLabel>
+              <Select
+                labelId="select-mascota-label"
+                value={selectedMascota}
+                label="Filtrar por Mascota" // Esto es vital para que el borde no corte el texto
+                onChange={(e) => setSelectedMascota(e.target.value)}
+              >
+                <MenuItem value=""><em>Todas las mascotas</em></MenuItem>
+                {mascotas.map((m) => (
+                  <MenuItem key={m.idMascota} value={m.idMascota}>{m.nombre}</MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+            <TablaTratamientos tratamientos={tratamientos}></TablaTratamientos>
+          </div>
+        )}
 
-      {activeItem != "" && (
-        <>
-        <p></p>
-        <button onClick={() => {setSelectedMascota(""); setActiveItem("")}} className="btn">Volver</button>
-        </>
-      )} 
+        {activeItem != "" && (
+          <>
+          <p></p>
+          <button onClick={() => {setSelectedMascota(""); setActiveItem("")}} className="btn">Volver</button>
+          </>
+        )} 
+        </div>
       </div>
-    </div>
+      
+      {mostrarFormCita && (
+        <div style={{
+            position: "fixed",
+            top: 0, left: 0,
+            width: "100%", height: "100%",
+            backgroundColor: "rgba(0,0,0,0.5)",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            zIndex: 1000
+        }}>
+            <div style={{
+                backgroundColor: "white",
+                padding: "30px",
+                borderRadius: "10px",
+                width: "400px"
+            }}>
+                <h3>Crear Cita</h3>
+
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                    <p>
+                        <DatePicker
+                            label="Fecha de la cita"
+                            value={fechaCita}
+                            onChange={(newValue) => setFechaCita(newValue)}
+                        />
+                    </p>
+                    <p>
+                        <TimePicker
+                            label="Hora de entrada"
+                            value={horaCita}
+                            onChange={(newValue) => setHoraCita(newValue)}
+                        />
+                    </p>
+                </LocalizationProvider>
+
+                <div style={{ display: "flex", gap: "10px", marginTop: "20px" }}>
+                    <button onClick={() => {setMostrarFormCita(false); setFechaCita(null); setHoraCita(null);}}>Cancelar</button>
+                    <button>Guardar</button>
+                </div>
+            </div>
+        </div>
+    )}
+  </>
   );
 }
 
