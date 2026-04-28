@@ -138,7 +138,7 @@ function MainMenu() {
   const [activeItem, setActiveItem] = useState("");
   const [mascotas, setMascotas] = useState([]);
   const [selectedMascota, setSelectedMascota] = useState("");
-  const [selectedMascotaCita, setSelectedMascotaCita] = useState("");
+  const [_selectedMascotaCita, setSelectedMascotaCita] = useState("");
   const [ListaCitas, setCitas] = useState([]);
   const correo = sessionStorage.getItem("Usuario")?.replace(/^"|"$/g, "");
   const menuItems = ["Mascotas", "Citas", "Tratamientos"];
