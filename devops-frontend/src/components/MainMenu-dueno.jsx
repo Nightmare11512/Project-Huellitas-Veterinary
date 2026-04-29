@@ -1,10 +1,10 @@
 import { useNavigate } from "react-router-dom";
-import { Select, MenuItem, FormControl, InputLabel, Button } from "@mui/material";
+import { Select, MenuItem, FormControl, InputLabel} from "@mui/material";
 import { useEffect, useState } from "react";
 import { getApiBaseHost } from '../Host';
 import { LocalizationProvider, DatePicker, TimePicker } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import dayjs from 'dayjs';
+
 import Swal from "sweetalert2";
 import "sweetalert2/dist/sweetalert2.min.css";
 import "../styles/MainMenu-dueno.css";
@@ -138,6 +138,7 @@ function MainMenu() {
   const [activeItem, setActiveItem] = useState("");
   const [mascotas, setMascotas] = useState([]);
   const [selectedMascota, setSelectedMascota] = useState("");
+  const [_selectedMascotaCita, setSelectedMascotaCita] = useState("");
   const [ListaCitas, setCitas] = useState([]);
   const correo = sessionStorage.getItem("Usuario")?.replace(/^"|"$/g, "");
   const menuItems = ["Mascotas", "Citas", "Tratamientos"];
@@ -448,26 +449,40 @@ function MainMenu() {
                 width: "400px"
             }}>
                 <h3>Crear Cita</h3>
-
-                <LocalizationProvider dateAdapter={AdapterDayjs}>
-                    <p>
-                        <DatePicker
-                            label="Fecha de la cita"
-                            value={fechaCita}
-                            onChange={(newValue) => setFechaCita(newValue)}
-                        />
-                    </p>
-                    <p>
-                        <TimePicker
-                            label="Hora de entrada"
-                            value={horaCita}
-                            onChange={(newValue) => setHoraCita(newValue)}
-                        />
-                    </p>
-                </LocalizationProvider>
+                <FormControl fullWidth sx={{ m: 1, minWidth: 200 }}>
+                  <InputLabel id="select-mascota-label">Crear Cita para:</InputLabel>
+                  <Select
+                      labelId="select-mascota-label"
+                      value={selectedMascota}
+                      label="Filtrar por Mascota"
+                      onChange={(e) => setSelectedMascotaCita(e.target.value)}
+                  >
+                      <MenuItem value=""><em>Seleccione uno</em></MenuItem>
+                      {mascotas.map((m) => (
+                          <MenuItem key={m.idMascota} value={m.idMascota}>{m.nombre}</MenuItem>
+                      ))}
+                  </Select>
+              
+                  <LocalizationProvider dateAdapter={AdapterDayjs}>
+                      <p>
+                          <DatePicker
+                              label="Fecha de la cita"
+                              value={fechaCita}
+                              onChange={(newValue) => setFechaCita(newValue)}
+                          />
+                      </p>
+                      <p>
+                          <TimePicker
+                              label="Hora de entrada"
+                              value={horaCita}
+                              onChange={(newValue) => setHoraCita(newValue)}
+                          />
+                      </p>
+                  </LocalizationProvider>
+                </FormControl>
 
                 <div style={{ display: "flex", gap: "10px", marginTop: "20px" }}>
-                    <button onClick={() => {setMostrarFormCita(false); setFechaCita(null); setHoraCita(null);}}>Cancelar</button>
+                    <button onClick={() => {setMostrarFormCita(false); setFechaCita(null); setHoraCita(null); setSelectedMascotaCita("")}}>Cancelar</button>
                     <button>Guardar</button>
                 </div>
             </div>
