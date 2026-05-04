@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Navigate } from "react-router-dom";
 import { Select, MenuItem, FormControl, InputLabel} from "@mui/material";
 import { useEffect, useState } from "react";
 import { getApiBaseHost } from '../Host';
@@ -183,10 +183,10 @@ function MainMenu() {
         timerProgressBar: true,
         showConfirmButton: false  
       }).then(() => {
-        navigate("/");
+        navigates("/");
       });
     }
-  }, [correo]);
+  }, [correo, navigate]);
 
   useEffect(() => {
     if (!correo) return;
