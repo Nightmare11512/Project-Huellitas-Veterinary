@@ -9,7 +9,7 @@ function MainMenuGestor() {
   const navigate = useNavigate();
   const correo = sessionStorage.getItem("Usuario")?.replace(/^"|"$/g, "");
   const [gestor, setGestor] = useState("");
-  const [activeItem, setActiveItem] = useState("");
+  const activeItem = useState("");
 
   const handleLogout = () => {
     Swal.fire({
