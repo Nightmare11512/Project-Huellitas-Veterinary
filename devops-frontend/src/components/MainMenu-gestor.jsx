@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { getApiBaseHost } from '../Host';
 import Swal from "sweetalert2";
 import "sweetalert2/dist/sweetalert2.min.css";
 import "../styles/MainMenu-gestor.css";
@@ -45,7 +44,7 @@ function MainMenuGestor() {
         navigate("/");
       });
     }
-  }, [correo]);
+  }, [correo, navigate]);
 
   useEffect(() => {
     if (!correo) return
