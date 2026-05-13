@@ -116,4 +116,12 @@ public class ConsultaMedicaModel {
     public void setIdMascota(MascotaModel idMascota) {
         this.idMascota = idMascota;
     }
+
+    public double getPeso() {
+        return peso;
+    }
+
+    public void setPeso(double peso) {
+        this.peso = peso;
+    }
 }
