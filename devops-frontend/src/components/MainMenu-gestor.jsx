@@ -44,7 +44,7 @@ function MainMenuGestor() {
         navigate("/");
       });
     }
-  }, [correo]);
+  }, [correo, navigate]);
 
   useEffect(() => {
     if (!correo) return

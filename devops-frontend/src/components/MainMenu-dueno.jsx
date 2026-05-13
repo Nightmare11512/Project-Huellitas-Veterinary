@@ -241,7 +241,7 @@ function MainMenu() {
         navigate("/");
       });
     }
-  }, [correo]);
+  }, [correo, navigate]);
 
   useEffect(() => {
     if (!correo) return;
