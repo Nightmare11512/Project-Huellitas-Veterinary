@@ -20,7 +20,7 @@ import jakarta.persistence.Table;
 @Entity
 @Table(name = "Consulta-Medica")
 public class ConsultaMedicaModel {
-
+    //Easteregg
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int idConsulta;
