@@ -246,7 +246,7 @@ function MainMenu() {
 
   useEffect(() => {
     if (!correo) return;
-    fetch(`http://${getApiBaseHost()}:8080/usuario/Nombre/${correo}`, {})
+    fetch(`/api/usuario/Nombre/${correo}`, {})
       .then((res) => res.json())
       .then((data) => setDueno(data))
       .catch((err) => console.error(err));
@@ -254,7 +254,7 @@ function MainMenu() {
 
   useEffect(() => {
     if (!correo) return;
-      fetch(`http://${getApiBaseHost()}:8080/mascota/usuario/${correo}`)
+      fetch(`/api/mascota/usuario/${correo}`)
       .then(res => res.json())
       .then(data => setNoMascota(data))
       .catch(err => console.error(err));
@@ -262,7 +262,7 @@ function MainMenu() {
 
   useEffect(() => {
     if (!correo) return;
-      fetch(`http://${getApiBaseHost()}:8080/cita/usuario/${correo}`)
+      fetch(`/api/cita/usuario/${correo}`)
       .then(res => res.json())
       .then(data => setNoCita(data))
       .catch(err => console.error(err));
@@ -270,7 +270,7 @@ function MainMenu() {
 
   useEffect(() => {
     if (!correo) return;
-    fetch(`http://${getApiBaseHost()}:8080/tratamiento/contar/${encodeURIComponent(correo)}`)
+    fetch(`/api/tratamiento/contar/${encodeURIComponent(correo)}`)
     .then(res => res.json())
     .then(data => setNoTratamientos(data))
     .catch(err => console.error(err));
@@ -291,8 +291,8 @@ function MainMenu() {
     if (!correo) return;
   
     const url = mascotaSeleccionadaObj
-      ? `http://${getApiBaseHost()}:8080/cita/${encodeURIComponent(correo)}/${mascotaSeleccionadaObj.idMascota}`
-      : `http://${getApiBaseHost()}:8080/cita/${correo}`;
+      ? `/api/cita/${encodeURIComponent(correo)}/${mascotaSeleccionadaObj.idMascota}`
+      : `/api/cita/${correo}`;
   
     fetch(url)
       .then(async (res) => {
@@ -309,7 +309,7 @@ function MainMenu() {
 
   useEffect(() => {
     if (!correo) return;
-    fetch(`http://${getApiBaseHost()}:8080/mascota/${correo}`)
+    fetch(`/api/mascota/${correo}`)
     .then(res => res.json())
     .then(data => setMascotas(data))
     .catch((err => console.error(err)));
@@ -350,12 +350,12 @@ function MainMenu() {
   useEffect(() => {
     if (!correo) return;
     if (!mascotaSeleccionadaObj) {
-      fetch(`http://${getApiBaseHost()}:8080/tratamiento/usuario/${encodeURIComponent(correo)}`)
+      fetch(`/api/tratamiento/usuario/${encodeURIComponent(correo)}`)
       .then(res => res.json())
       .then(data => setTratamientos(data))
       .catch(err => console.log(err));
      } else {
-      fetch(`http://${getApiBaseHost()}:8080/tratamiento/usuario/${encodeURIComponent(correo)}/${mascotaSeleccionadaObj.idMascota}`)
+      fetch(`/api/tratamiento/usuario/${encodeURIComponent(correo)}/${mascotaSeleccionadaObj.idMascota}`)
       .then(res => res.json())
       .then(data => setTratamientos(data))
       .catch(err => console.error(err));
@@ -378,7 +378,7 @@ function MainMenu() {
       const fechaFormateada = fechaCita.format('YYYY-MM-DD');
       const horaFormateada = horaCita.format('HH:mm:ss');
   
-      const response = await fetch(`http://${getApiBaseHost()}:8080/cita/crear`, {
+      const response = await fetch(`/api/cita/crear`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -435,7 +435,7 @@ function MainMenu() {
     try {
       await Promise.all(
         citasSeleccionadas.map((idCita) =>
-          fetch(`http://${getApiBaseHost()}:8080/cita/cancelar/${idCita}`, {
+          fetch(`/api/cita/cancelar/${idCita}`, {
             method: "PUT",
           })
         )
