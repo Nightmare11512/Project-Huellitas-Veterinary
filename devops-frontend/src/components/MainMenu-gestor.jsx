@@ -49,7 +49,7 @@ function MainMenuGestor() {
 
   useEffect(() => {
     if (!correo) return
-    fetch(`http://${getApiBaseHost()}:8080/usuario/Nombre/${correo}`)
+    fetch(`/api/usuario/Nombre/${correo}`)
     .then(res => res.json())
     .then(data => setGestor(data))
     .catch(err => console.log(err));
