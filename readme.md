@@ -4,7 +4,7 @@
 [![Spring-Boot](https://img.shields.io/badge/Spring_boot-orange)](https://spring.io/projects/spring-boot)
 [![JavaScript](https://img.shields.io/badge/JavaScript-ES6-yellow)](https://developer.mozilla.org/)
 [![CSS](https://img.shields.io/badge/CSS-3-blue)](https://www.w3.org/Style/CSS/)
-[![React](https://img.shields.io/badge/React-blue)](https://developer.mozilla.org/)
+
 [![License](https://img.shields.io/badge/Licencia-MIT-green)](LICENSE)
 [![Status](https://img.shields.io/badge/Estado-En%20Desarrollo-brightgreen)]()
 
